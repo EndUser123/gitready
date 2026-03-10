@@ -19,6 +19,13 @@ Create GitHub-ready Python libraries, Claude skills, and Claude Code plugins wit
 
 All packages are polished into resume-worthy GitHub artifacts with badges, CI/CD workflows, coverage metrics, and media assets.
 
+## Media Assets
+
+- 📊 [Architecture Diagram](assets/infographics/github-ready_architecture.png) - Visual overview of the github-ready system
+- 🎬 [Explainer Video](assets/videos/github-ready_explainer_video.mp4) - Quick overview of features and workflow
+- 🎙️ [Podcast Overview](assets/videos/github-ready_explainer_podcast.mp4) - Deep dive into package creation
+- 📑 [Presentation Slides](assets/slides/github-ready_slides.pdf) - Detailed slide deck ([PPTX](assets/slides/github-ready_slides.pptx) also available)
+
 ## Features
 
 - **Intelligent Detection**: Automatically detects package type and needs

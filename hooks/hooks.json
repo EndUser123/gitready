@@ -1,0 +1,13 @@
+{
+  "UserPromptSubmit": [
+    {
+      "matcher": ".*(?:create|make|scaffold|generate).*(?:package|library|repo|plugin)",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "echo 'github-ready skill triggered'"
+        }
+      ]
+    }
+  ]
+}

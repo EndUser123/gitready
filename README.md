@@ -3,6 +3,7 @@
 ![Version](https://img.shields.io/badge/version-5.5.1-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-purple.svg)
+![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)
 
 > Universal Package Creator & Portfolio Polisher v5.5.1
 

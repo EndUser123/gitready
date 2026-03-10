@@ -49,5 +49,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 See previous skill documentation for historical changes.
 
+[5.5.2]: https://github.com/yourusername/github-ready/compare/v5.5.1...v5.5.2
 [5.5.1]: https://github.com/yourusername/github-ready/compare/v5.5.0...v5.5.1
 [5.5.0]: https://github.com/yourusername/github-ready/compare/v5.4.0...v5.5.0

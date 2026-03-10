@@ -33,9 +33,11 @@ All packages are polished into resume-worthy GitHub artifacts with badges, CI/CD
 
 Quick overview of features and workflow:
 
-https://github.com/EndUser123/github-ready/assets/157998649/8d8f8e8f-8f8f-4f8f-8f8f-8f8f8f8f8f8f
+<div align="center">
+  <video src="assets/videos/github-ready_explainer_video.mp4" width="640" height="360" controls></video>
+</div>
 
-[Download video](assets/videos/github-ready_explainer_video.mp4) | [Watch on GitHub](assets/videos/github-ready_explainer_video.mp4)
+[⬇️ Download video](assets/videos/github-ready_explainer_video.mp4) | [🔗 Direct link](assets/videos/github-ready_explainer_video.mp4)
 
 ---
 
@@ -43,21 +45,31 @@ https://github.com/EndUser123/github-ready/assets/157998649/8d8f8e8f-8f8f-4f8f-8
 
 Deep dive into package creation:
 
-https://github.com/EndUser123/github-ready/assets/157998649/8d8f8e8f-8f8f-4f8f-8f8f-8f8f8f8f8f8f
+<div align="center">
+  <video src="assets/videos/github-ready_explainer_podcast.mp4" width="640" height="360" controls></video>
+</div>
 
-[Download podcast](assets/videos/github-ready_explainer_podcast.mp4) | [Listen on GitHub](assets/videos/github-ready_explainer_podcast.mp4)
+[⬇️ Download podcast](assets/videos/github-ready_explainer_podcast.mp4) | [🔗 Direct link](assets/videos/github-ready_explainer_podcast.mp4)
 
 ---
 
 ### 📑 Presentation Slides
 
-**[View PDF (GitHub-flavored rendering)](assets/slides/github-ready_slides.pdf)**
+<div align="center">
+  <p>
+    <a href="assets/slides/github-ready_slides.pdf">
+      <img src="assets/slides/github-ready_slides.pdf" alt="Presentation Slides" width="600">
+    </a>
+  </p>
+</div>
+
+**[📄 View PDF in GitHub viewer](assets/slides/github-ready_slides.pdf)**
 
 Download: [PDF](assets/slides/github-ready_slides.pdf) | [PPTX (editable)](assets/slides/github-ready_slides.pptx)
 
 ---
 
-**💡 Tip**: Right-click any video to save it, or open PDFs in GitHub's viewer for annotations!
+**💡 Tip**: Videos are playable inline! Click the play button or right-click to download. PDFs open in GitHub's viewer with annotation support.
 
 ## Features
 

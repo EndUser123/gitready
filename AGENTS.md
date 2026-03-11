@@ -152,6 +152,7 @@ Before finishing ANY task, you MUST:
 ### 2. C4 Diagram Validity
 
 - [ ] All diagrams in `docs/diagrams/` follow Mermaid C4 syntax
+- [ ] No GitHub-incompatible Mermaid patterns: `System_Bnd`, `Container_Bnd`, `Component_Bnd`, `UpdateLayoutConfig`, `include:`, or `%%%`
 - [ ] Test diagrams render: `mmdc -i docs/diagrams/c4_context.mmd` (if mmdc installed)
 
 ### 3. README Links

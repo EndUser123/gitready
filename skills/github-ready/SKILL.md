@@ -1525,6 +1525,15 @@ SOLUTION (60s): Introduce package, show key features (AFTER)
 - Outputs to `docs/diagrams/` for easy editing and git tracking
 - Embeds diagrams in README.md using Mermaid code blocks
 
+**GitHub compatibility rules (mandatory):**
+- Generate diagrams for **GitHub's Mermaid renderer**, not Mermaid Live's broader feature set
+- Use external nodes like `System_Ext`, `Container_Ext`, and `Component_Ext` for third-party systems
+- Do **not** use `System_Bnd`, `Container_Bnd`, or `Component_Bnd` as standalone nodes
+- Do **not** emit `UpdateLayoutConfig(...)` in GitHub-facing diagrams
+- Mermaid init headers must end with exactly `%%`, never `%%%`
+- Embed the full Mermaid block in `README.md`; do **not** use `include:` syntax in README Mermaid fences
+- If a diagram needs boundaries, prefer keeping those only in non-GitHub render targets unless you've verified the exact syntax renders on GitHub
+
 **Diagram types generated:**
 
 | Diagram | Purpose | Output File | C4 Level |
@@ -1547,10 +1556,16 @@ mkdir -p docs/diagrams
 # 2. Invoke mermaid-diagrams skill via Skill tool
 # Generates c4_context.mmd, c4_containers.mmd, c4_components.mmd
 
-# 3. Embed in README.md
+# 3. Copy GitHub-compatible Mermaid into README.md
 ```mermaid
 %%{init: {'theme':'base'}}%%
-include:docs/diagrams/c4_context.mmd
+C4Context
+    title System Context - {{package_name}}
+    Person(user, "User", "Uses the package")
+    System(package, "{{package_name}}", "{{short_description}}")
+    System_Ext(github, "GitHub", "Code hosting and collaboration platform")
+    Rel(user, package, "Uses")
+    Rel(package, github, "Publishes to")
 ```
 ```
 
@@ -1568,6 +1583,13 @@ include:docs/diagrams/c4_context.mmd
 - Check diagrams use proper C4 notation (person, system, container boundaries)
 - Verify relationships show data flow and dependencies
 - Validate Mermaid syntax renders correctly
+- Scan `README.md` and `docs/diagrams/*.mmd` for banned patterns before finishing:
+  - `System_Bnd`
+  - `Container_Bnd`
+  - `Component_Bnd`
+  - `UpdateLayoutConfig`
+  - `include:`
+  - `%%%`
 
 **Comparison: Mermaid vs NotebookLM diagrams**
 

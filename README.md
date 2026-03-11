@@ -60,15 +60,10 @@ Deep dive into package creation
 4. Replace `YOUR_USER_ID` and `VIDEO_ID` in the video tag below
 5. Delete the badge link
 
-Once uploaded, embedded video will appear here:
+Embedded video:
 
-```html
-<video src="https://user-images.githubusercontent.com/YOUR_USER_ID/VIDEO_ID/github-ready_explainer_podcast.mp4" controls="controls" style="max-width: 730px; margin: 10px 0;">
+<video src="https://github.com/user-attachments/assets/deb9dfc6-c6ae-4be3-b425-67b9fe5154bc" controls="controls" style="max-width: 730px; margin: 10px 0;">
 </video>
-```
-
-*Current fallback (download required):*
-[![Listen to Podcast](https://img.shields.io/badge/🎙️-Listen%20Now-purple?style=for-the-badge)](assets/videos/github-ready_explainer_podcast.mp4)
 
 **[⬇️ Download podcast (34 MB)](assets/videos/github-ready_explainer_podcast.mp4)** | [🔗 Direct link](assets/videos/github-ready_explainer_podcast.mp4)
 

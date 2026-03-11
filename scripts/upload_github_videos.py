@@ -30,9 +30,22 @@ class GitHubVideoUploader:
         self.cdn_links = {}
 
     async def get_page_content(self, page) -> str:
-        """Extract page content from CodeMirror editor."""
+        """Extract page content from GitHub's editor (new or old)."""
         try:
-            # Method 1: Try CodeMirror's getValue
+            # Method 1: Try new contenteditable editor (2025+)
+            content = await page.evaluate("""
+                () => {
+                    const editor = document.querySelector('[contenteditable="true"]');
+                    return editor ? editor.innerText : '';
+                }
+            """)
+            if content:
+                return content
+        except:
+            pass
+
+        try:
+            # Method 2: Try CodeMirror (old GitHub editor)
             content = await page.evaluate("""
                 () => {
                     const cm = document.querySelector('.CodeMirror');
@@ -44,7 +57,7 @@ class GitHubVideoUploader:
         except:
             pass
 
-        # Method 2: Try textarea fallback
+        # Method 3: Try textarea fallback
         try:
             textarea = await page.locator('textarea[name="value"]').input_value()
             if textarea:

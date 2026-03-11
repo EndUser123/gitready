@@ -75,7 +75,7 @@ def update_plugin_json(version: str) -> bool:
         print("⚠️  Warning: .claude-plugin/plugin.json not found, skipping")
         return False
 
-    with open(plugin_path, 'r') as f:
+    with open(plugin_path, 'r', encoding='utf-8') as f:
         try:
             data = json.load(f)
         except json.JSONDecodeError as e:
@@ -91,7 +91,7 @@ def update_plugin_json(version: str) -> bool:
     data['version'] = version
 
     # Write back with nice formatting
-    with open(plugin_path, 'w') as f:
+    with open(plugin_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4)
         f.write('\n')  # Add trailing newline
 
@@ -123,46 +123,28 @@ def update_readme(version: str) -> bool:
     content = readme_path.read_text(encoding='utf-8')
     original_content = content
 
-    try:
-        # Pattern 1: Markdown links like [v5.5.0] or v5.5.0 in text
-        # Only update if it looks like a version (not random numbers)
-        content = re.sub(
-            r'(?<=v)(\d+\.\d+\.\d+)(?=[\s\]\)|,|\s)',
-            version,
-            content
-        )
+    # Apply each pattern individually with error handling
+    patterns = [
+        ("Pattern 1", r'(?<=v)(\d+\.\d+\.\d+)(?=[\s\]\)|,|\s])', version),
+        ("Pattern 2", r'version-(\d+\.\d+\.\d+)', f'version-{version}'),
+        ("Pattern 3", r'Version:\s*\d+\.\d+\.\d+', f'Version: {version}'),
+        ("Pattern 4", r'alt="Version badge-\d+\.\d+\.\d+', f'alt="Version badge-{version}"'),
+    ]
 
-        # Pattern 2: Badge URLs like version-5.5.0-blue
-        content = re.sub(
-            r'version-(\d+\.\d+\.\d+)',
-            f'version-{version}',
-            content
-        )
-
-        # Pattern 3: Explicit "Version: X.Y.Z" references
-        content = re.sub(
-            r'Version:\s*\d+\.\d+\.\d+',
-            f'Version: {version}',
-            content
-        )
-
-        # Pattern 4: Badge image titles (simplified to avoid regex errors)
-        content = re.sub(
-            r'alt="Version badge-\d+\.\d+\.\d+',
-            f'alt="Version badge-{version}"',
-            content
-        )
-
-    except re.error as e:
-        print(f"⚠️  Warning: Regex error during README update: {e}")
-        print("   Skipping README version update")
-        return False
+    for name, pattern, replacement in patterns:
+        try:
+            content = re.sub(pattern, replacement, content)
+        except re.error as e:
+            print(f"⚠️  Warning: {name} failed: {e}")
+            print(f"   Pattern: {pattern}")
+            print("   Skipping README version update")
+            return False
 
     if content == original_content:
         print(f"✓ README.md already synchronized ({version})")
         return False
 
-    readme_path.write_text(content)
+    readme_path.write_text(content, encoding='utf-8')
     print(f"✓ Updated README.md version references → {version}")
     return True
 
@@ -182,7 +164,7 @@ def validate_sync(version: str) -> bool:
     # Validate plugin.json
     plugin_path = Path(".claude-plugin/plugin.json")
     if plugin_path.exists():
-        with open(plugin_path, 'r') as f:
+        with open(plugin_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
             plugin_version = data.get('version')
             if plugin_version != version:

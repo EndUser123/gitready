@@ -23,8 +23,9 @@ Create GitHub-ready Python libraries, Claude skills, and Claude Code plugins wit
 
 Quick overview of features and workflow
 
-<video src="https://github.com/user-attachments/assets/14e58085-1bdc-4e7d-a068-b1daadf72702" controls="controls" style="max-width: 730px; margin: 10px 0;">
-</video>
+[![Watch Video](https://img.shields.io/badge/🎬-Watch_Video-blue?style=for-the-badge)](assets/videos/github-ready_explainer_video.mp4)
+
+**⬇️ Download video (871 KB)** | 🔗 Direct link
 
 ---
 

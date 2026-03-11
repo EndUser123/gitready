@@ -1513,59 +1513,66 @@ SOLUTION (60s): Introduce package, show key features (AFTER)
 
 ---
 
-## C4 Technical Diagrams (Mermaid)
+## System Overview Diagrams (GitHub-First Mermaid)
 
-**Objective**: Generate editable, version-controllable C4 architecture diagrams for technical documentation.
+**Objective**: Generate editable Mermaid architecture diagrams that render cleanly on GitHub.
 
 **When**: Runs automatically after NotebookLM media generation.
 
 **What this does:**
-- Creates C4 model diagrams using Mermaid syntax (text-based, version-controllable)
-- Generates system context, container, and component diagrams
-- Outputs to `docs/diagrams/` for easy editing and git tracking
-- Embeds diagrams in README.md using Mermaid code blocks
+- Creates plain Mermaid flowcharts for the README and optional supporting docs
+- Generates a high-level system overview and workflow diagram
+- Outputs source diagrams to `docs/diagrams/` for easy editing and git tracking
+- Embeds the GitHub-safe overview directly in `README.md`
 
 **GitHub compatibility rules (mandatory):**
-- Generate diagrams for **GitHub's Mermaid renderer**, not Mermaid Live's broader feature set
-- Use external nodes like `System_Ext`, `Container_Ext`, and `Component_Ext` for third-party systems
-- Do **not** use `System_Bnd`, `Container_Bnd`, or `Component_Bnd` as standalone nodes
-- Do **not** emit `UpdateLayoutConfig(...)` in GitHub-facing diagrams
-- Mermaid init headers must end with exactly `%%`, never `%%%`
-- Embed the full Mermaid block in `README.md`; do **not** use `include:` syntax in README Mermaid fences
-- If a diagram needs boundaries, prefer keeping those only in non-GitHub render targets unless you've verified the exact syntax renders on GitHub
+- Target **GitHub's Mermaid renderer**, not Mermaid Live's broader feature set
+- Prefer `graph TB` or `flowchart TB` system-overview diagrams for anything embedded in `README.md`
+- Keep labels short and structural: phases, systems, outputs, decisions
+- Do **not** use Mermaid C4 blocks (`C4Context`, `C4Container`, `C4Component`) in GitHub-facing README sections
+- Do **not** emit `UpdateLayoutConfig(...)`, `include:`, or malformed init closers like `%%%`
+- If technical C4 diagrams are still useful, keep them as optional secondary docs and verify they are not the primary README artifact
 
 **Diagram types generated:**
 
-| Diagram | Purpose | Output File | C4 Level |
-|---------|---------|-------------|----------|
-| **System Context** | Big picture: system + external actors | `docs/diagrams/c4_context.mmd` | Level 1 |
-| **Containers** | Applications, data stores, microservices | `docs/diagrams/c4_containers.mmd` | Level 2 |
-| **Components** | Internal structure of containers | `docs/diagrams/c4_components.mmd` | Level 3 |
+| Diagram | Purpose | Output File | Style |
+|---------|---------|-------------|-------|
+| **System Overview** | High-level architecture and outputs | `docs/diagrams/system_overview.mmd` | Mermaid flowchart |
+| **Workflow** | Phase-by-phase pipeline view | `docs/diagrams/workflow.mmd` | Mermaid flowchart |
+| **Optional Technical Detail** | Lower-level system detail | `docs/diagrams/c4_*.mmd` | Mermaid C4, only if needed |
 
-**Why Mermaid + C4:**
+**Why this style:**
 - **Editable**: Text-based → easy to update alongside code
 - **Version-controllable**: Track changes in git like code
-- **Renderable**: GitHub, GitLab, VS Code render Mermaid natively
-- **Standard**: C4 model is industry convention for architecture diagrams
+- **Renderable**: GitHub renders basic Mermaid flowcharts more consistently than C4
+- **Readable**: Better portfolio presentation for recruiters and repo visitors
+- **Portable**: Same structure works in README, docs pages, and HTML wrappers
 
 **Execution flow:**
 ```bash
 # 1. Create diagrams directory
 mkdir -p docs/diagrams
 
-# 2. Invoke mermaid-diagrams skill via Skill tool
-# Generates c4_context.mmd, c4_containers.mmd, c4_components.mmd
+# 2. Generate GitHub-safe Mermaid flowcharts
+# Prefer system_overview.mmd and workflow.mmd
 
-# 3. Copy GitHub-compatible Mermaid into README.md
+# 3. Copy GitHub-compatible overview into README.md
 ```mermaid
-%%{init: {'theme':'base'}}%%
-C4Context
-    title System Context - {{package_name}}
-    Person(user, "User", "Uses the package")
-    System(package, "{{package_name}}", "{{short_description}}")
-    System_Ext(github, "GitHub", "Code hosting and collaboration platform")
-    Rel(user, package, "Uses")
-    Rel(package, github, "Publishes to")
+graph TB
+    Input[User: /{{package_name}}] --> Detect[Detect Package Type]
+    Detect --> Type{Package Type?}
+    Type -->|Plugin| Plugin[Plugin Structure]
+    Type -->|Skill| Skill[Skill Structure]
+    Type -->|Library| Library[Library Structure]
+    Plugin --> Polish[Portfolio Polish]
+    Skill --> Polish
+    Library --> Polish
+    Polish --> Docs[Documentation]
+    Polish --> Media[Media Assets]
+    Polish --> CI[CI/CD]
+    Docs --> Output[GitHub-Ready Package]
+    Media --> Output
+    CI --> Output
 ```
 ```
 
@@ -1580,10 +1587,13 @@ C4Context
 - No API keys required (pure Mermaid syntax generation)
 
 **Quality verification:**
-- Check diagrams use proper C4 notation (person, system, container boundaries)
-- Verify relationships show data flow and dependencies
+- Check the README diagram is a plain Mermaid flowchart, not C4
+- Verify relationships show the major phases, decisions, and outputs
 - Validate Mermaid syntax renders correctly
 - Scan `README.md` and `docs/diagrams/*.mmd` for banned patterns before finishing:
+  - `C4Context`
+  - `C4Container`
+  - `C4Component`
   - `System_Bnd`
   - `Container_Bnd`
   - `Component_Bnd`

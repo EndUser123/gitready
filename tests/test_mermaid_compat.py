@@ -16,6 +16,12 @@ FORBIDDEN_PATTERNS = (
     "}%%%",
 )
 
+README_FORBIDDEN_PATTERNS = FORBIDDEN_PATTERNS + (
+    "C4Context",
+    "C4Container",
+    "C4Component",
+)
+
 
 def _read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
@@ -23,7 +29,7 @@ def _read_text(path: Path) -> str:
 
 def test_readme_mermaid_uses_github_compatible_subset():
     content = _read_text(README_PATH)
-    for pattern in FORBIDDEN_PATTERNS:
+    for pattern in README_FORBIDDEN_PATTERNS:
         assert pattern not in content, f"README contains forbidden Mermaid pattern: {pattern}"
 
 

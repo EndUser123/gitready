@@ -641,6 +641,12 @@ ln -s /path/to/packages/{{package_name}}/skills/{{package_name}} ~/.claude/skill
   - Plugin skills: `package-name/skills/skill-name/SKILL.md` → junction target: `skills/skill-name/`
   - Standalone skills: `package-name/skill/SKILL.md` → junction target: `skill/`
 
+**Important Note on Skill Naming:**
+- The junction NAME (`{{package_name}}`) should match the skill directory name in the package
+- This ensures the skill URL (`/skill-name`) works correctly
+- Example: If package has `skills/my-skill/SKILL.md`, create junction as `P:/.claude/skills/my-skill/`
+- The skill's **aliases** in the frontmatter determine what users type to invoke it
+
 #### 2. HOOKS (Dev Deployment - Hook Files Only)
 
 **For**: When this package has hook files (\`.py\` files in \`core/hooks/\`) you want to test.

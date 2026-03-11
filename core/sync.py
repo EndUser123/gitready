@@ -145,9 +145,9 @@ def update_readme(version: str) -> bool:
         content
     )
 
-    # Pattern 4: Badge image titles
+    # Pattern 4: Badge image titles (simplified to avoid regex errors)
     content = re.sub(
-        r'alt="Version (?:badge|.*?)-\d+\.\d+\.\d+',
+        r'alt="Version badge-\d+\.\d+\.\d+',
         f'alt="Version badge-{version}"',
         content
     )

@@ -16,6 +16,7 @@ workflow_steps:
   - generate_badges
   - create_documentation
   - validate_package
+  - cleanup_obsolete_files
 
 suggest:
   - /init

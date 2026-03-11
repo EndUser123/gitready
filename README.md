@@ -1,13 +1,16 @@
 # github-ready
 
-![Version](https://img.shields.io/badge/version-5.5.1-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-purple.svg)
-![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)
+[![Version](https://img.shields.io/badge/version-5.5.1-blue.svg)]
+[![License](https://img.shields.io/badge/license-MIT-green.svg)]
+[![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-purple.svg)]
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)]
+[🌐 Live Demo](https://enduser123.github.io/github-ready/)
 
 > Universal Package Creator & Portfolio Polisher v5.5.1
 
 Create GitHub-ready Python libraries, Claude skills, and Claude Code plugins with badges, CI/CD workflows, coverage metrics, and media artifacts.
+
+**[📖 Interactive Overview →](https://enduser123.github.io/github-ready/)**
 
 ## Media Assets
 

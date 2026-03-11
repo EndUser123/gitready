@@ -212,7 +212,7 @@ graph TB
 
 ### 📑 Presentation Slides
 
-**[📄 View PDF in GitHub viewer](assets/slides/github_ready_slides.pdf)** | [📥 Download PDF](assets/slides/github_ready_slides.pdf) | [📊 Download PPTX (editable)](assets/slides/github_ready_slides.pptx)
+**[📄 View PDF in GitHub viewer](assets/slides/github-ready_slides.pdf)** | [📥 Download PDF](assets/slides/github-ready_slides.pdf) | [📊 Download PPTX (editable)](assets/slides/github-ready_slides.pptx)
 
 ---
 

@@ -850,13 +850,9 @@ graph TB
 
 ---
 
-### 🌐 Interactive Flowchart Pages
+### 🌐 GitHub Pages Video
 
 **[🎨 Watch the explainer in the browser →](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)**
-
-**[🎨 Interactive Architecture Flowchart →](https://{{github_username}}.github.io/{{package_name}}/docs/{{package_name}}-architecture.html)**
-
-**[🎨 Interactive Workflow Diagram →](https://{{github_username}}.github.io/{{package_name}}/docs/{{package_name}}-workflow.html)**
 
 ---
 
@@ -896,7 +892,7 @@ Deep dive into package creation.
 - **Fallback**: Keep the release asset MP4 link for direct download/open
 - **PDFs**: Use direct markdown links - opens in GitHub's built-in PDF viewer
 - **Badges**: Use shields.io badges for visual appeal and clickability
-- **GitHub Pages**: Enable Pages from \`main\` root so \`docs/*.html\` and \`docs/video.html\` are publicly available
+- **GitHub Pages**: Enable Pages from \`main\` root so \`docs/video.html\` is publicly available
 - **Durations**: Never hardcode video or podcast runtimes. Measure the exported file first or omit the duration label entirely
 
 **Runtime verification examples:**

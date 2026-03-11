@@ -1050,8 +1050,9 @@ meta_review_summary = {
 **What this does:**
 - Generates visual assets for portfolio-quality packages
 - Creates banner images for GitHub social preview
-- Builds architecture diagrams via NotebookLM
+- Builds static overview images plus GitHub-safe Mermaid flowcharts
 - Produces explainer videos with PBS (Problem-Behavior-Solution) structure
+- Creates a dedicated HTML video player page for GitHub Pages playback
 - Verifies asset quality with vision API before acceptance
 
 **Generated Assets:**
@@ -1059,11 +1060,11 @@ meta_review_summary = {
 | Asset | Purpose | Tool | Time | Output Formats |
 |-------|---------|------|------|---------------|
 | **Banner** | GitHub social preview | OpenRouter | ~30s | `assets/banners/{package}_banner.png` |
-| **Architecture diagram** | Visual system overview | NotebookLM | ~2min | `assets/infographics/{package}_architecture.png` |
-| **C4 Technical Diagrams** | Editable architecture specs | mermaid-diagrams | ~1min | `docs/diagrams/c4_context.mmd` (system context) |
-| | | | | `docs/diagrams/c4_containers.mmd` (containers) |
-| | | | | `docs/diagrams/c4_components.mmd` (components) |
+| **Architecture overview image** | Visual system overview | NotebookLM | ~2min | `assets/infographics/{package}_architecture.png` |
+| **System overview flowchart** | GitHub-safe architecture view | Mermaid | ~1min | `docs/diagrams/system_overview.mmd` |
+| **Workflow flowchart** | Phase-by-phase pipeline view | Mermaid | ~1min | `docs/diagrams/workflow.mmd` |
 | **Interactive HTML** | Portfolio showcase | visual-explainer:generate-web-diagram | ~30s | `docs/{package}-architecture.html` |
+| **Video player page** | Browser playback via GitHub Pages | Static HTML | ~30s | `docs/video.html` |
 | **Explainer video** | AI-narrated PBS overview | NotebookLM | ~5min | `assets/videos/{package}_explainer_pbs.mp4` |
 | **Slide deck** | Interactive presentation | NotebookLM | ~2min | `assets/slides/{package}_slides.pdf` (download as PDF) |
 | | | | | `assets/slides/{package}_slides.pptx` (download as PPTX) |

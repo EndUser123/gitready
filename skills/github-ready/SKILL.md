@@ -860,7 +860,7 @@ graph TB
 
 ---
 
-### 🎬 Explainer Video (22 seconds)
+### 🎬 Explainer Video
 
 Quick overview of features and workflow.
 
@@ -872,7 +872,7 @@ Quick overview of features and workflow.
 
 ---
 
-### 🎙️ Podcast Overview (2m 20s)
+### 🎙️ Podcast Overview
 
 Deep dive into package creation.
 
@@ -897,6 +897,13 @@ Deep dive into package creation.
 - **PDFs**: Use direct markdown links - opens in GitHub's built-in PDF viewer
 - **Badges**: Use shields.io badges for visual appeal and clickability
 - **GitHub Pages**: Enable Pages from \`main\` root so \`docs/*.html\` and \`docs/video.html\` are publicly available
+- **Durations**: Never hardcode video or podcast runtimes. Measure the exported file first or omit the duration label entirely
+
+**Runtime verification examples:**
+```bash
+ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 assets/videos/{{package_name}}_explainer_pbs.mp4
+ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 assets/videos/{{package_name}}_explainer_podcast.mp4
+```
 
 **For brownfield conversions**: See \`references/brownfield-conversion.md\` for README update instructions (migration notice, rollback instructions, updated usage examples).
 ## PHASE 4: Validate (1min)

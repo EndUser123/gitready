@@ -26,4 +26,4 @@ Quick feature tours generated with NotebookLM Video Overviews:
 
 ---
 
-**💡 Note**: Videos are exported from NotebookLM and hosted directly in this repository. This keeps our internal notes private while sharing polished demonstrations publicly.
+**💡 Note**: Videos are exported from NotebookLM and hosted directly in this repository. Verify each runtime from the final exported file before mentioning duration in README text.

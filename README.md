@@ -127,7 +127,7 @@ cmd /c "mklink HookName.py P:/packages/github-ready/core/hooks/HookName.py"
 
 > 💡 **Note**: These assets were generated using NotebookLM integration and automatically published to GitHub Releases for easy access.
 
-### 🎙️ Explainer Video (22 seconds)
+### 🎙️ Explainer Video
 
 [![Watch the demo with audio](assets/preview.gif)](https://enduser123.github.io/github-ready/docs/video.html)
 
@@ -135,7 +135,8 @@ cmd /c "mklink HookName.py P:/packages/github-ready/core/hooks/HookName.py"
 > **[⬇️ Download the MP4 directly](https://github.com/EndUser123/github-ready/releases/download/media/github_ready_explainer_pbs.mp4)**
 > *Browser playback requires GitHub Pages to be enabled for this repository.*
 
-**Quick overview**: Features, workflow, and automated portfolio polish
+**Quick overview**: Features, workflow, and automated portfolio polish.
+*Runtime should match the exported NotebookLM asset; update this text only after verifying the final file duration.*
 
 ---
 

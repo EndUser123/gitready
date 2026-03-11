@@ -173,7 +173,7 @@ graph TB
     HTML --> Polish
     OpenRouter --> Polish
 
-    Polish --> Badges[Badges & CI/CD]
+    Polish --> Badges[Badges and CI/CD]
     Polish --> Docs[Documentation]
     Polish --> Changelog[CHANGELOG.md]
 

@@ -154,9 +154,7 @@ Quick overview of features and workflow
 
 ### 📑 Presentation Slides
 
-**[📄 View PDF in GitHub viewer](https://github.com/EndUser123/github-ready/releases/download/media/slides.pdf)**
-
-**[📥 Download PDF](https://github.com/EndUser123/github-ready/releases/download/media/slides.pdf)** | **[📊 Download PPTX (editable)](assets/slides/github_ready_slides.pptx)**
+**[📄 View PDF in GitHub viewer](assets/slides/github_ready_slides.pdf)** | [📥 Download PDF](assets/slides/github_ready_slides.pdf) | [📊 Download PPTX (editable)](assets/slides/github_ready_slides.pptx)
 
 ---
 

@@ -123,34 +123,40 @@ def update_readme(version: str) -> bool:
     content = readme_path.read_text()
     original_content = content
 
-    # Pattern 1: Markdown links like [v5.5.0] or v5.5.0 in text
-    # Only update if it looks like a version (not random numbers)
-    content = re.sub(
-        r'(?<=v)(\d+\.\d+\.\d+)(?=[\s\]\)|,|\s)',
-        version,
-        content
-    )
+    try:
+        # Pattern 1: Markdown links like [v5.5.0] or v5.5.0 in text
+        # Only update if it looks like a version (not random numbers)
+        content = re.sub(
+            r'(?<=v)(\d+\.\d+\.\d+)(?=[\s\]\)|,|\s)',
+            version,
+            content
+        )
 
-    # Pattern 2: Badge URLs like version-5.5.0-blue
-    content = re.sub(
-        r'version-(\d+\.\d+\.\d+)',
-        f'version-{version}',
-        content
-    )
+        # Pattern 2: Badge URLs like version-5.5.0-blue
+        content = re.sub(
+            r'version-(\d+\.\d+\.\d+)',
+            f'version-{version}',
+            content
+        )
 
-    # Pattern 3: Explicit "Version: X.Y.Z" references
-    content = re.sub(
-        r'Version:\s*\d+\.\d+\.\d+',
-        f'Version: {version}',
-        content
-    )
+        # Pattern 3: Explicit "Version: X.Y.Z" references
+        content = re.sub(
+            r'Version:\s*\d+\.\d+\.\d+',
+            f'Version: {version}',
+            content
+        )
 
-    # Pattern 4: Badge image titles (simplified to avoid regex errors)
-    content = re.sub(
-        r'alt="Version badge-\d+\.\d+\.\d+',
-        f'alt="Version badge-{version}"',
-        content
-    )
+        # Pattern 4: Badge image titles (simplified to avoid regex errors)
+        content = re.sub(
+            r'alt="Version badge-\d+\.\d+\.\d+',
+            f'alt="Version badge-{version}"',
+            content
+        )
+
+    except re.error as e:
+        print(f"⚠️  Warning: Regex error during README update: {e}")
+        print("   Skipping README version update")
+        return False
 
     if content == original_content:
         print(f"✓ README.md already synchronized ({version})")

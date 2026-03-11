@@ -1058,7 +1058,7 @@ meta_review_summary = {
 - Generates visual assets for portfolio-quality packages
 - Creates banner images for GitHub social preview
 - Builds static overview images plus GitHub-safe Mermaid flowcharts
-- Produces explainer videos with PBS (Problem-Behavior-Solution) structure
+- Produces concise technical explainer videos focused on architecture, workflow, and outputs
 - Creates a dedicated HTML video player page for GitHub Pages playback
 - Verifies asset quality with vision API before acceptance
 
@@ -1072,7 +1072,7 @@ meta_review_summary = {
 | **Workflow flowchart** | Phase-by-phase pipeline view | Mermaid | ~1min | `docs/diagrams/workflow.mmd` |
 | **Interactive HTML** | Portfolio showcase | visual-explainer:generate-web-diagram | ~30s | `docs/{package}-architecture.html` |
 | **Video player page** | Browser playback via GitHub Pages | Static HTML | ~30s | `docs/video.html` |
-| **Explainer video** | AI-narrated PBS overview | NotebookLM | ~5min | `assets/videos/{package}_explainer_pbs.mp4` |
+| **Explainer video** | AI-narrated technical walkthrough | NotebookLM | ~1-3min target | `assets/videos/{package}_explainer_pbs.mp4` |
 | **Slide deck** | Interactive presentation | NotebookLM | ~2min | `assets/slides/{package}_slides.pdf` (download as PDF) |
 | | | | | `assets/slides/{package}_slides.pptx` (download as PPTX) |
 
@@ -1094,7 +1094,7 @@ meta_review_summary = {
 
 **Execution flow:**
 ```
-Provider detection → Review bundle generation → Multi-source upload (review bundle + source files) → Asset generation (NotebookLM + visual-explainer) → Quality verification → Notebook cleanup
+Provider detection → Review bundle generation → Video brief generation → Multi-source upload (brief + review bundle + source files) → Asset generation (NotebookLM + visual-explainer) → Quality verification → Notebook cleanup
 ```
 
 **Asset generation via nlm CLI (v0.4.4+):**
@@ -1107,7 +1107,8 @@ NOTEBOOK_ID="<your-notebook-id>"
 nlm infographic create "$NOTEBOOK_ID" --orientation landscape --detail standard --style professional --confirm
 
 # Create explainer video
-nlm video create "$NOTEBOOK_ID" --format explainer --style auto_select --confirm
+# Prefer a concise technical walkthrough, not a broad marketing script.
+nlm video create "$NOTEBOOK_ID" --format explainer --style documentary --confirm
 
 # Create slide deck
 nlm slides create "$NOTEBOOK_ID" --slide-format detailed_deck --confirm
@@ -1270,6 +1271,31 @@ if [ -n "$REVIEW_BUNDLE" ] && [ -f "$REVIEW_BUNDLE" ]; then
   nlm source add "$NOTEBOOK_ID" --file "$REVIEW_BUNDLE" --wait
   echo "✓ Review bundle uploaded"
 fi
+
+# === STEP 3.5: Upload a narration brief to control tone and length ===
+cat > /tmp/video_brief.md <<'EOF'
+# Video Brief
+
+Create a concise technical explainer video for engineers evaluating this package.
+
+Requirements:
+- Tone: technical, calm, direct, low-hype
+- Audience: developers, maintainers, technical reviewers
+- Length target: 60 to 120 seconds
+- Focus on:
+  1. what the package does
+  2. how the workflow operates
+  3. what files and outputs it creates
+  4. why the result is useful in practice
+- Prefer concrete nouns and file paths over abstract claims
+- Avoid marketing language, rhetorical questions, and dramatic setup
+- Avoid extended "before/after pain" storytelling
+- Avoid filler such as "imagine", "revolutionary", "seamless", "game-changing"
+- End with a brief technical summary, not a call-to-action
+EOF
+
+nlm source add "$NOTEBOOK_ID" --file /tmp/video_brief.md --wait
+echo "✓ Video brief uploaded"
 
 # === STEP 4: Upload source files (implementation details) ===
 # CRITICAL: Upload IMPLEMENTATION files FIRST, not just documentation!
@@ -1479,12 +1505,26 @@ ghi789  Package Documentation
 3. **Fallback**: Multi-source without review bundle if review_bundle skill unavailable
 3. **Fallback**: Single README if sources unavailable (degraded quality)
 
-**PBS video structure:**
+**Recommended video structure:**
 ```
-PROBLEM (30s): What issue is being solved?
-BEHAVIOR (45s): Current state/pain points (BEFORE)
-SOLUTION (60s): Introduce package, show key features (AFTER)
+CONTEXT (10-15s): Name the package and its purpose in one sentence.
+WORKFLOW (25-40s): Show how it detects type, generates structure, and validates outputs.
+ARTIFACTS (20-30s): Call out the key outputs: docs, CI/CD, flowchart, video, slides.
+SUMMARY (10-15s): Close with the practical result for a developer using the package.
 ```
+
+**Avoid this anti-pattern:**
+- long “problem/pain/agitate” intros
+- generic business narration
+- theatrical transitions
+- repeating the same feature list in multiple ways
+- durations over 2 minutes unless the user explicitly wants a deep dive
+
+**Why the old approach was annoying:**
+- PBS tends to produce sales-demo narration rather than technical explanation
+- fixed long sections bias NotebookLM toward overlong scripts
+- `auto_select` style makes tone unpredictable
+- the result often sounds generic even when the source material is technical
 
 **Quality verification:**
 - Check assets contain package name
@@ -1959,7 +1999,7 @@ checklist=(
 - ✅ **MERGED**: /media-pipeline integrated as PHASE 4.7 (Media Generation)
 - ✅ Auto-generates professional portfolio assets (banners, diagrams, videos)
 - ✅ NotebookLM integration for architecture diagrams and explainer videos
-- ✅ PBS (Problem-Behavior-Solution) video structure for AI narrated overviews
+- ✅ Initial explainer video structure for AI narrated overviews (later refined toward a shorter technical style)
 - ✅ Vision API verification for asset quality before acceptance
 - ✅ Provider detection (NotebookLM, OpenRouter) with clear setup instructions
 - ✅ Auto-skip for internal tools (python-library type) or when providers missing

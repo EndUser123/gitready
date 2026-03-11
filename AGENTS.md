@@ -149,12 +149,11 @@ Before finishing ANY task, you MUST:
 - [ ] `README.md` version references match `core/__init__.py`
 - [ ] Run `python core/sync.py` if versions are out of sync
 
-### 2. C4 Diagram Validity
+### 2. Diagram Validity
 
-- [ ] All diagrams in `docs/diagrams/` follow Mermaid C4 syntax
 - [ ] No GitHub-incompatible Mermaid patterns: `System_Bnd`, `Container_Bnd`, `Component_Bnd`, `UpdateLayoutConfig`, `include:`, or `%%%`
 - [ ] `README.md` uses a GitHub-safe Mermaid flowchart for the primary architecture view, not Mermaid C4 blocks
-- [ ] Test diagrams render: `mmdc -i docs/diagrams/c4_context.mmd` (if mmdc installed)
+- [ ] Test Mermaid diagrams render with `mmdc` if it is installed
 
 ### 3. README Links
 

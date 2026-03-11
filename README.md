@@ -164,7 +164,7 @@ graph TB
     CodeReview --> Media[Phase 4.7: Media Generation]
 
     Media --> NotebookLM[NotebookLM Assets]
-    Media --> Mermaid[C4 Diagrams]
+    Media --> Mermaid[Architecture Diagrams]
     Media --> HTML[Interactive HTML]
     Media --> OpenRouter[Optional Banner]
 
@@ -268,8 +268,6 @@ graph TB
 ```
 
 *Interactive source:* [github-ready-architecture.html](docs/github-ready-architecture.html)
-
-*Optional technical diagram sources:* [c4_context.mmd](docs/diagrams/c4_context.mmd) | [c4_containers.mmd](docs/diagrams/c4_containers.mmd) | [c4_components.mmd](docs/diagrams/c4_components.mmd)
 
 ---
 

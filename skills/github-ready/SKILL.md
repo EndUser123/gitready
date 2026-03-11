@@ -1601,7 +1601,7 @@ graph TB
 
 ---
 
-## Interactive HTML Architecture Diagram
+## Interactive HTML Architecture Flowchart
 
 **Objective**: Generate a beautiful, interactive HTML diagram for portfolio showcasing and documentation.
 
@@ -1882,7 +1882,7 @@ checklist=(
 
 ### v5.5.5 (2026-03-10)
 - ✅ **GITHUB-COMPATIBLE MEDIA**: Fixed README media template for GitHub compatibility
-- ✅ Replaced HTML5 `<video>` tags with badge-style links (GitHub doesn't support video tags)
+- ✅ Replaced inline README video attempts with GitHub-safe links
 - ✅ Removed broken PDF thumbnail images - use clean markdown links instead
 - ✅ Added shields.io badges for visual appeal (🎬 Watch Video, 🎙️ Listen Now)
 - ✅ Simplified PDF links - open in GitHub's built-in PDF viewer
@@ -1890,11 +1890,17 @@ checklist=(
 
 ### v5.5.4 (2026-03-10)
 - ✅ **MEDIA ASSETS TEMPLATE**: Added Media Assets section template to PHASE 3 README generation
-- ✅ HTML5 `<video>` tags for inline playback with controls
+- ✅ Early media template for browser playback experiments
 - ✅ Center-aligned media with proper markdown image embedding
 - ✅ Download links and direct links for all assets
-- ✅ Prevents "media assets not visible on GitHub" issue - videos now playable inline
+- ✅ Improved media visibility on GitHub with direct links and better structure
 - ✅ Images embedded directly, PDFs with GitHub viewer integration
+
+### v5.5.6 (2026-03-11)
+- ✅ **GITHUB PAGES VIDEO PLAYBACK**: README now links preview GIFs to `docs/video.html` on GitHub Pages
+- ✅ README architecture section now defaults to GitHub-safe Mermaid flowcharts instead of C4 blocks
+- ✅ Media guidance updated to treat direct MP4 links as fallback, not the primary playback path
+- ✅ Skill instructions aligned with the working `github.io` player-page workflow
 
 ### v5.5.3 (2026-03-10)
 - ✅ **COMPLETION REPORT**: Added GitHub readiness status check at end of workflow

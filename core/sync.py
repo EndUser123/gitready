@@ -175,31 +175,25 @@ def validate_sync(version: str) -> bool:
     readme_path = Path("README.md")
     if readme_path.exists():
         content = readme_path.read_text(encoding='utf-8')
-        # Check for specific outdated version patterns
-        # Look for: v5.5.0, "Version: 5.5.0", or standalone 5.5.0 not in badge URLs
-        outdated_patterns = [
-            rf'v{version}',  # v prefix
-            rf'Version: {version}',  # Version: prefix
-            rf'> Polisher v{version}<',  # Version tag in HTML
-        ]
+        # Check for version patterns that DON'T match the expected version
+        # This catches cases where old versions weren't updated
+        version_pattern = re.compile(r'\bv?\d+\.\d+\.\d+[-\w.]*\b')
 
-        issues_found = False
-        for pattern in outdated_patterns:
-            if pattern in content:
-                # But exclude badge URLs which are correct
-                lines_with_version = [line for line in content.split('\n') if pattern in line]
-                for line in lines_with_version:
-                    # Skip if it's a badge URL (which is correct)
-                    if 'badge-' in line or 'shields.io' in line or '.svg' in line:
-                        continue
-                    # Skip if already correct (contains replacement)
-                    if 'version-' + version in line:
-                        continue
-                    print("❌ Validation failed: README.md contains outdated version reference")
-                    print(f"   Pattern: {pattern}")
-                    print(f"   Line: {line.strip()}")
-                    issues_found = True
-                    all_valid = False
+        for match in version_pattern.finditer(content):
+            found_version = match.group()
+            # Extract just the X.Y.Z part
+            version_match = re.match(r'(\d+\.\d+\.\d+)', found_version)
+            if version_match:
+                extracted_version = version_match.group(1)
+                # Skip if this is the expected version
+                if extracted_version == version:
+                    continue
+                # Skip badge URLs and shields.io (those are correct)
+                if 'shields.io' in content[match.start()-30:match.end()] or '.svg' in found_version:
+                    continue
+                # Found an outdated version!
+                print(f"❌ Validation failed: README.md contains version '{found_version}', expected '{version}'")
+                all_valid = False
 
     return all_valid
 

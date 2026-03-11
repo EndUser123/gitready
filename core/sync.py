@@ -175,13 +175,31 @@ def validate_sync(version: str) -> bool:
     readme_path = Path("README.md")
     if readme_path.exists():
         content = readme_path.read_text(encoding='utf-8')
-        # Check for any outdated version patterns
-        outdated = README_VERSION_PATTERN.findall(content)
-        # Filter to only actual version numbers (not 3-digit numbers in text)
-        for found_version in set(outdated):
-            if found_version != version and re.match(r'^\d+\.\d+\.\d+', found_version):
-                print(f"❌ Validation failed: README.md contains version '{found_version}', expected '{version}'")
-                all_valid = False
+        # Check for specific outdated version patterns
+        # Look for: v5.5.0, "Version: 5.5.0", or standalone 5.5.0 not in badge URLs
+        outdated_patterns = [
+            rf'v{version}',  # v prefix
+            rf'Version: {version}',  # Version: prefix
+            rf'> Polisher v{version}<',  # Version tag in HTML
+        ]
+
+        issues_found = False
+        for pattern in outdated_patterns:
+            if pattern in content:
+                # But exclude badge URLs which are correct
+                lines_with_version = [line for line in content.split('\n') if pattern in line]
+                for line in lines_with_version:
+                    # Skip if it's a badge URL (which is correct)
+                    if 'badge-' in line or 'shields.io' in line or '.svg' in line:
+                        continue
+                    # Skip if already correct (contains replacement)
+                    if 'version-' + version in line:
+                        continue
+                    print("❌ Validation failed: README.md contains outdated version reference")
+                    print(f"   Pattern: {pattern}")
+                    print(f"   Line: {line.strip()}")
+                    issues_found = True
+                    all_valid = False
 
     return all_valid
 

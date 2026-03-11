@@ -355,6 +355,8 @@ cmd /c "mklink SessionStart_handoff_restore.py p:\packages\handoff\core\hooks\Se
 
 ### For Claude Skills (`PACKAGE_TYPE=claude-skill`)
 
+**Standalone Claude Skill structure** (not part of a plugin):
+
 ```
 {{TARGET_DIR}}/
 ├── skill/                     # Single source of truth
@@ -369,7 +371,7 @@ cmd /c "mklink SessionStart_handoff_restore.py p:\packages\handoff\core\hooks\Se
 ```
 
 **IMPORTANT**: Claude skills do NOT need `pyproject.toml`. They are distributed as:
-- Skills: Via junctions (Windows) or symlinks (macOS/Linux) to `~/.claude/skills/`
+- Skills: Via junctions (Windows) or symlinks (macOS/Linux) from `skill/` to `~/.claude/skills/skill-name/`
 - Hooks: Referenced in `~/.claude/settings.local.json`
 - NOT pip-installable (no `src/`, no Python package)
 

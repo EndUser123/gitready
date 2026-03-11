@@ -110,6 +110,9 @@ class GitHubVideoUploader:
         if not upload_success:
             raise Exception("All upload methods failed")
 
+        # Get editor content BEFORE upload (for comparison)
+        content_before = await self.get_page_content(page)
+
         # Wait for upload to complete - GitHub needs time to process and insert the link
         print("  ⏳ Waiting for GitHub to process upload (this may take 10-30 seconds)...")
         await asyncio.sleep(10)  # Give GitHub more time to upload
@@ -118,31 +121,26 @@ class GitHubVideoUploader:
         for attempt in range(6):  # Try 6 times (30 seconds total)
             print(f"  🔍 Checking for uploaded file... (attempt {attempt + 1}/6)")
 
-            # Get editor content
-            content = await self.get_page_content(page)
+            # Get editor content AFTER upload
+            content_after = await self.get_page_content(page)
+
+            # Find NEW URLs that weren't there before
+            urls_before = set(re.findall(r'https?://[^\s\)"\>]+', content_before))
+            urls_after = set(re.findall(r'https?://[^\s\)"\>]+', content_after))
+            new_urls = urls_after - urls_before
+
+            # Debug: Show what we found
+            if len(new_urls) > 0:
+                print(f"  🆕 Found {len(new_urls)} new URL(s)")
+                for url in new_urls:
+                    if 'user-attachments/assets' in url or 'user-images.githubusercontent.com' in url:
+                        print(f"  ✅ Found upload URL: {url}")
+                        return url
 
             # Debug: Show a snippet of content
-            if len(content) > 0:
-                preview = content[:200] if len(content) > 200 else content
+            if len(content_after) > 0:
+                preview = content_after[:300] if len(content_after) > 300 else content_after
                 print(f"  📄 Editor content preview: {preview}...")
-            else:
-                print("  ⚠️  Editor content is empty")
-
-            # Look for markdown image link with user-images URL
-            # GitHub inserts: ![filename](https://user-images.githubusercontent.com/...)
-            match = re.search(r'!\[.*?\]\((https://user-images\.githubusercontent\.com/[^\)]+)\)', content)
-
-            if match:
-                cdn_link = match.group(1)
-                print(f"  ✅ CDN link found: {cdn_link}")
-                return cdn_link
-
-            # Fallback: Look for any user-images URL in content
-            match = re.search(r'https://user-images\.githubusercontent\.com/[^\s\)"\>]+', content)
-            if match:
-                cdn_link = match.group(0)
-                print(f"  ✅ CDN link found (fallback): {cdn_link}")
-                return cdn_link
 
             # Wait before next attempt
             if attempt < 5:

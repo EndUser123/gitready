@@ -822,76 +822,59 @@ cmd /c "mklink HookName.py P:/packages/{{package_name}}/core/hooks/HookName.py"
 \`\`\`markdown
 ## Media Assets
 
-### 📊 Architecture Diagram
+### 📊 Architecture Flowchart
 
-![Architecture Diagram](assets/infographics/{{package_name}}_architecture.png)
+```mermaid
+graph TB
+    Input[User: /{{package_name}}] --> Detect[Detect Package Type]
+    Detect --> Type{Package Type?}
+    Type -->|Plugin| Plugin[Plugin Structure]
+    Type -->|Skill| Skill[Skill Structure]
+    Type -->|Library| Library[Library Structure]
+    Plugin --> Polish[Portfolio Polish]
+    Skill --> Polish
+    Library --> Polish
+    Polish --> Docs[Documentation]
+    Polish --> Media[Media Assets]
+    Polish --> CI[CI/CD]
+    Docs --> Output[GitHub-Ready Package]
+    Media --> Output
+    CI --> Output
+```
+
+#### Static Overview Image
+
+![Architecture Flowchart Overview](assets/infographics/{{package_name}}_architecture.png)
 
 *Visual overview of the {{package_name}} system workflow*
 
 ---
 
-### 🌐 Interactive Workflow Diagram
+### 🌐 Interactive Flowchart Pages
 
-**[🔗 Open Interactive Diagram](docs/{{package_name}}-workflow.html)**
+**[🎨 Watch the explainer in the browser →](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)**
 
-*Explore the complete package creation workflow with an interactive HTML diagram*
+**[🎨 Interactive Architecture Flowchart →](https://{{github_username}}.github.io/{{package_name}}/docs/{{package_name}}-architecture.html)**
 
-**Features:**
-- 🎯 Visual workflow from input to GitHub-ready package
-- 📊 Detailed phase breakdown (7 phases)
-- 🎨 Pan and zoom support for exploring details
-- 📱 Mobile-responsive design
-- 🌐 Self-contained (opens in browser)
-
-**Download:** [📥 Save HTML](docs/{{package_name}}-workflow.html)
+**[🎨 Interactive Workflow Diagram →](https://{{github_username}}.github.io/{{package_name}}/docs/{{package_name}}-workflow.html)**
 
 ---
 
 ### 🎬 Explainer Video (22 seconds)
 
-Quick overview of features and workflow
+Quick overview of features and workflow.
 
-**To enable embedded video playback on GitHub:**
-1. Open this README in GitHub's web editor
-2. Drag and drop `assets/videos/{{package_name}}_explainer_video.mp4` into the editor
-3. Copy the resulting user-images CDN link
-4. Replace `YOUR_USER_ID` and `VIDEO_ID` in the video tag below
-5. Delete the badge link
+[![Watch the demo with audio](assets/preview.gif)](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)
 
-Once uploaded, embedded video will appear here:
-
-```html
-<video src="https://user-images.githubusercontent.com/YOUR_USER_ID/VIDEO_ID/{{package_name}}_explainer_video.mp4" controls="controls" style="max-width: 730px; margin: 10px 0;">
-</video>
-```
-
-*Current fallback (download required):*
-[![Watch Video](https://img.shields.io/badge/🎬-Watch%20Video-blue?style=for-the-badge)](assets/videos/{{package_name}}_explainer_video.mp4)
-
-**[⬇️ Download video](assets/videos/{{package_name}}_explainer_video.mp4)** | [🔗 Direct link](assets/videos/{{package_name}}_explainer_video.mp4)
+> **[🎬 Watch the explainer in the browser](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)**  
+> **[⬇️ Download the MP4 directly](https://github.com/{{github_username}}/{{package_name}}/releases/download/media/{{package_name}}_explainer_pbs.mp4)**
+> *Browser playback requires GitHub Pages to be enabled for this repository.*
 
 ---
 
 ### 🎙️ Podcast Overview (2m 20s)
 
-Deep dive into package creation
-
-**To enable embedded video playback on GitHub:**
-1. Open this README in GitHub's web editor
-2. Drag and drop `assets/videos/{{package_name}}_explainer_podcast.mp4` into the editor
-3. Copy the resulting user-images CDN link
-4. Replace `YOUR_USER_ID` and `VIDEO_ID` in the video tag below
-5. Delete the badge link
-
-Once uploaded, embedded video will appear here:
-
-```html
-<video src="https://user-images.githubusercontent.com/YOUR_USER_ID/VIDEO_ID/{{package_name}}_explainer_podcast.mp4" controls="controls" style="max-width: 730px; margin: 10px 0;">
-</video>
-```
-
-*Current fallback (download required):*
-[![Listen to Podcast](https://img.shields.io/badge/🎙️-Listen%20Now-purple?style=for-the-badge)](assets/videos/{{package_name}}_explainer_podcast.mp4)
+Deep dive into package creation.
 
 **[⬇️ Download podcast](assets/videos/{{package_name}}_explainer_podcast.mp4)** | [🔗 Direct link](assets/videos/{{package_name}}_explainer_podcast.mp4)
 
@@ -903,16 +886,17 @@ Once uploaded, embedded video will appear here:
 
 ---
 
-**💡 Tip**: Videos can be downloaded and played locally. PDFs open in GitHub's viewer with annotation support.
+**💡 Tip**: Use GitHub Pages for in-browser video playback. PDFs open in GitHub's viewer with annotation support.
 \`\`\`
 
 **IMPORTANT**: This Media Assets section uses GitHub-compatible markdown. Key points:
 - **Images**: Use standard markdown \`![alt](path)\` syntax - renders inline
-- **Videos**: GitHub DOES support embedded \`<video>\` tags - but videos must be uploaded via GitHub web editor to get user-images CDN links (template includes instructions)
-- **Fallback**: Badge-style links work for repo-hosted videos (download required)
+- **Videos**: Do not rely on HTML \`<video>\` tags in \`README.md\`
+- **Recommended pattern**: Link the preview GIF in \`README.md\` to \`https://{{github_username}}.github.io/{{package_name}}/docs/video.html\`
+- **Fallback**: Keep the release asset MP4 link for direct download/open
 - **PDFs**: Use direct markdown links - opens in GitHub's built-in PDF viewer
 - **Badges**: Use shields.io badges for visual appeal and clickability
-- **HTML for videos**: HTML \`<video>\` tags work ONLY with user-images CDN links (from web editor upload)
+- **GitHub Pages**: Enable Pages from \`main\` root so \`docs/*.html\` and \`docs/video.html\` are publicly available
 
 **For brownfield conversions**: See \`references/brownfield-conversion.md\` for README update instructions (migration notice, rollback instructions, updated usage examples).
 ## PHASE 4: Validate (1min)

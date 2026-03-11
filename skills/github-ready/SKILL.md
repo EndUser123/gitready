@@ -83,7 +83,7 @@ This skill includes utility scripts and reference documentation:
 - **DEFAULT**: Claude Code Plugins (`.claude-plugin/`, `core/`, `hooks/`) for packages with hooks/skills
 - **CONVERSION**: Brownfield Python library → Plugin conversion (src/ → core/)
 - **ADVANCED**: Pure Python libraries (`src/`, `pyproject.toml`) for backend-only code (no hooks/skills)
-- Portfolio-quality README with badges, architecture diagrams, Quick Start
+- Portfolio-quality README with badges, architecture flowchart, Quick Start
 - CI/CD workflows with status badges (Python libraries only)
 - NotebookLM integration for AI-generated explainer videos and diagrams
 
@@ -1500,7 +1500,7 @@ SOLUTION (60s): Introduce package, show key features (AFTER)
 
 ## System Overview Diagrams (GitHub-First Mermaid)
 
-**Objective**: Generate editable Mermaid architecture diagrams that render cleanly on GitHub.
+**Objective**: Generate editable Mermaid architecture flowcharts that render cleanly on GitHub.
 
 **When**: Runs automatically after NotebookLM media generation.
 
@@ -1657,7 +1657,7 @@ The HTML diagram link should be added to the README Media Assets section:
 ```markdown
 ### 📊 Architecture Flowchart
 
-**[🎨 View Interactive Architecture Diagram →](docs/{package}-architecture.html)**
+**[🎨 View Interactive Architecture Flowchart →](docs/{package}-architecture.html)**
 
 ![Architecture Flowchart Overview](assets/infographics/{package}_architecture.png)
 
@@ -1733,7 +1733,8 @@ The HTML diagram link should be added to the README Media Assets section:
 - **Badges**: Coverage, version, license, CI status (shields.io)
 - **CI/CD**: GitHub Actions workflows for testing and deployment
 - **Documentation**: CHANGELOG.md, CONTRIBUTING.md, AGENTS.md, API docs from docstrings
-- **Architecture diagrams**: Mermaid diagrams in README.md
+- **Architecture flowchart**: GitHub-safe Mermaid flowchart in README.md
+- **Video playback page**: `docs/video.html` linked from README for GitHub Pages playback
 - **Quick Start**: Installation and usage examples for < 5min setup
 
 **CI/CD Workflow Template** (`.github/workflows/test.yml`):

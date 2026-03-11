@@ -1,0 +1,20 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1f6feb', 'primaryTextColor': '#c9d1d9', 'primaryBorderColor': '#58a6ff', 'lineColor': '#58a6ff', 'secondaryColor': '#21262d', 'tertiaryColor': '#161b22'}}}%%%
+%% C4 System Context Diagram for github-ready
+%% Shows the github-ready tool in the context of users and external systems
+
+C4Context
+    title System Context - github-ready Package Creator
+
+    Person(user, "Package Developer", "Creates packages using /github-ready command")
+
+    System(github_ready, "github-ready", "Universal Package Creator & Portfolio Polisher")
+
+    System_Bnd(gitHub, "GitHub", "Code hosting and collaboration platform")
+
+    System_Bnd(notebookLM, "NotebookLM", "AI-powered research and note-taking", "Optional")
+
+    Rel(user, github_ready, "Uses", "CLI command (/github-ready)")
+    Rel(github_ready, gitHub, "Publishes", "Portfolio-ready packages")
+    Rel(github_ready, notebookLM, "Generates", "Media assets (optional)")
+
+    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="2")

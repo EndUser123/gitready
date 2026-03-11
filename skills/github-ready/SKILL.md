@@ -860,7 +860,7 @@ graph TB
 
 Quick overview of features and workflow.
 
-[![Watch the demo with audio](assets/videos/debug_screenshot.png)](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)
+[![Watch the demo with audio](assets/videos/{{package_name}}_video_poster.png)](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)
 
 > **[🎬 Watch the explainer in the browser](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)**  
 > **[⬇️ Download the MP4 directly](https://github.com/{{github_username}}/{{package_name}}/releases/download/media/{{package_name}}_explainer_pbs.mp4)**
@@ -892,7 +892,7 @@ Deep dive into package creation.
 **IMPORTANT**: This Media Assets section uses GitHub-compatible markdown. Key points:
 - **Images**: Use standard markdown \`![alt](path)\` syntax - renders inline
 - **Videos**: Do not rely on HTML \`<video>\` tags in \`README.md\`
-- **Recommended pattern**: Link the video preview still in \`README.md\` to \`https://{{github_username}}.github.io/{{package_name}}/docs/video.html\`
+- **Recommended pattern**: Link a verified still frame such as \`assets/videos/{{package_name}}_video_poster.png\` in \`README.md\` to \`https://{{github_username}}.github.io/{{package_name}}/docs/video.html\`
 - **Fallback**: Keep the release asset MP4 link for direct download/open
 - **PDFs**: Use direct markdown links - opens in GitHub's built-in PDF viewer
 - **Badges**: Use shields.io badges for visual appeal and clickability
@@ -1667,7 +1667,7 @@ graph TB
 **Integration with README.md:**
 
 ```markdown
-[![Watch the demo with audio](assets/preview.gif)](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)
+[![Watch the demo with audio](assets/videos/{{package_name}}_video_poster.png)](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)
 ```
 
 **Rules:**

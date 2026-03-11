@@ -1,15 +1,48 @@
 # github-ready
 
-[![Version](https://img.shields.io/badge/version-5.5.0-blue.svg)](https://github.com/EndUser123/github-ready)
+[![Version](https://img.shields.io/badge/version-5.5.5-blue.svg)](https://github.com/EndUser123/github-ready)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-purple.svg)](https://github.com/EndUser123/github-ready)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/EndUser123/github-ready/actions)
 
-> Universal Package Creator and Portfolio Polisher v5.5.0
+> Universal Package Creator and Portfolio Polisher v5.5.5
 
 Create GitHub-ready Python libraries, Claude skills, and Claude Code plugins with badges, CI/CD workflows, coverage metrics, and media artifacts.
 
-## Installation
+## Quick Start
+
+```bash
+# Create a new package (auto-detects type)
+/github-ready mylib
+
+# Polish existing repository
+/github-ready --target P:/packages/existing-repo
+
+# Preview what will happen
+/github-ready --dry-run myproject
+```
+
+## What It Generates
+
+- 🎯 **Intelligent Detection**: Automatically detects package type and requirements from project structure
+- 📦 **Multi-Format Support**: Creates Claude skills, Python libraries, and Claude Code plugins
+- 🎨 **Portfolio Polish**: Adds badges, CI/CD, CHANGELOG, API docs, and media artifacts
+- 🎬 **Media Generation**: Creates banners, diagrams, explainer videos, and presentations
+- 🔍 **Code Review**: Automated quality validation before portfolio polish
+- 🔄 **Brownfield Conversion**: Converts existing Python libraries to plugins
+
+## How It Works
+
+**One command → Full intelligent pipeline:**
+
+1. **DETECT** — Scan repository, identify gaps and needs
+2. **ANALYZE** — Determine package type automatically
+3. **GENERATE** — Create all missing artifacts (structure, badges, CI/CD, docs, CHANGELOG)
+4. **VALIDATE** — Verify everything works
+5. **CLEANUP** — Detect and remove obsolete files from refactoring
+6. **REPORT** — Show what was created with evidence
+
+## Development and Deployment
 
 ### Three Deployment Models
 
@@ -89,39 +122,6 @@ cmd /c "mklink HookName.py P:/packages/github-ready/core/hooks/HookName.py"
 - ❌ Don't symlink entire directories to `P:/.claude/hooks/` (only symlink `.py` files)
 - ❌ Don't confuse skills (`P:/.claude/skills/`) with plugins (`~/.claude/plugins/`)
 - ❌ Don't forget to update symlinks after brownfield conversion - check for `src/` paths
-
-## Features
-
-- 🎯 **Intelligent Detection**: Automatically detects package type and requirements from project structure
-- 📦 **Multi-Format Support**: Creates Claude skills, Python libraries, and Claude Code plugins
-- 🎨 **Portfolio Polish**: Adds badges, CI/CD, CHANGELOG, API docs, and media artifacts
-- 🎬 **Media Generation**: Creates banners, diagrams, explainer videos, and presentations
-- 🔍 **Code Review**: Automated quality validation before portfolio polish
-- 🔄 **Brownfield Conversion**: Converts existing Python libraries to plugins
-
-## Quick Start
-
-```bash
-# Create a new package (auto-detects type)
-/github-ready mylib
-
-# Polish existing repository
-/github-ready --target P:/packages/existing-repo
-
-# Preview what will happen
-/github-ready --dry-run myproject
-```
-
-## What It Does
-
-**One command → Full intelligent pipeline:**
-
-1. **DETECT** — Scan repository, identify gaps and needs
-2. **ANALYZE** — Determine package type automatically
-3. **GENERATE** — Create all missing artifacts (structure, badges, CI/CD, docs, CHANGELOG)
-4. **VALIDATE** — Verify everything works
-5. **CLEANUP** — Detect and remove obsolete files from refactoring
-6. **REPORT** — Show what was created with evidence
 
 ## Media Assets
 
@@ -232,7 +232,6 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Resources
 
-- [NotebookLM Video Workflow](NOTEBOOKLM_VIDEO_WORKFLOW.md) - Guide for creating explainer videos
 - [templates/](templates/) - Template files for various package elements
 - [Video Workflow Template](templates/video-section-template.md) - Copy-paste template for README videos
 

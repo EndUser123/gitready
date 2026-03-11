@@ -622,17 +622,24 @@ touch {{TARGET_DIR}}/tests/__init__.py
 **Setup:**
 \`\`\`powershell
 # Windows (Junction - No admin required)
-New-Item -ItemType Junction -Path "P:\.claude\skills\{{package_name}}" -Target "P:\packages\{{package_name}}"
+# For plugins with skills: Junction to the skills/ subdirectory
+New-Item -ItemType Junction -Path "P:\.claude\skills\{{package_name}}" -Target "P:\packages\{{package_name}}\skills\{{package_name}}"
+
+# For standalone skills (skill/ directory): Junction to the skill/ subdirectory
+# New-Item -ItemType Junction -Path "P:\.claude\skills\{{package_name}}" -Target "P:\packages\{{package_name}}\skill"
 
 # macOS/Linux (Symlink)
-ln -s /path/to/packages/{{package_name}} ~/.claude/skills/{{package_name}}
+ln -s /path/to/packages/{{package_name}}/skills/{{package_name}} ~/.claude/skills/{{package_name}}
 \`\`\`
 
 **Key points:**
 - ✅ Edit in \`P:/packages/{{package_name}}\`, changes work immediately
 - ✅ No reinstallation required - skills auto-discover from \`P:/.claude/skills/\`
 - ✅ Perfect for active development
-- ✅ Junction the entire directory (not individual files)
+- ✅ Junction to `skills/{{package_name}}/` for plugin skills, or `skill/` for standalone skills
+- ⚠️  **CRITICAL**: The junction target must point to WHERE THE SKILL.md FILE ACTUALLY LIVES:
+  - Plugin skills: `package-name/skills/skill-name/SKILL.md` → junction target: `skills/skill-name/`
+  - Standalone skills: `package-name/skill/SKILL.md` → junction target: `skill/`
 
 #### 2. HOOKS (Dev Deployment - Hook Files Only)
 

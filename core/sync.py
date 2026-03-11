@@ -192,7 +192,7 @@ def validate_sync(version: str) -> bool:
     # Validate README.md
     readme_path = Path("README.md")
     if readme_path.exists():
-        content = readme_path.read_text()
+        content = readme_path.read_text(encoding='utf-8')
         # Check for any outdated version patterns
         outdated = README_VERSION_PATTERN.findall(content)
         # Filter to only actual version numbers (not 3-digit numbers in text)

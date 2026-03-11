@@ -9,16 +9,6 @@
 
 Create GitHub-ready Python libraries, Claude skills, and Claude Code plugins with badges, CI/CD workflows, coverage metrics, and media artifacts.
 
-## What It Does
-
-**PRIMARY GOAL**: Create **Claude Code Plugins** for packages with hooks, skills, or Claude Code integration.
-
-**SECONDARY GOAL**: Convert existing Python libraries to plugins (brownfield conversion).
-
-**ADVANCED USE CASE**: Create pure Python backend libraries (pip-installable, no hooks/skills) — only when plugin architecture isn't appropriate.
-
-All packages are polished into resume-worthy GitHub artifacts with badges, CI/CD workflows, coverage metrics, and media assets.
-
 ## Media Assets
 
 ### 📊 Architecture Diagram

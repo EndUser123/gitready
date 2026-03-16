@@ -37,10 +37,10 @@ All packages are polished into resume-worthy GitHub artifacts with badges, CI/CD
 
 **v5.3 Update**: Integrated code-review plugin for automated quality validation before portfolio polish. Packages are now reviewed for security, performance, and maintainability issues before adding badges and CI/CD. More efficient workflow: fix quality issues before polishing.
 
-**v5.2 Update**: Aligned with official Claude Code plugin structure. Plugins now follow best practices from hookify, context7, and plugin-dev: minimal plugin.json, scripts/ directory for Python code, hooks/hooks.json, .mcp.json for MCP, and optional commands/agents/skills directories.
+**v5.2 Update**: Aligned with official Claude Code plugin structure. Plugins now follow best practices from hookify, context7, and plugin-dev: minimal plugin.json, core/ directory for Python code, hooks/hooks.json, .mcp.json for MCP, and optional commands/agents/skills directories.
 
 **What this does:**
-- **Scaffold**: Create canonical Claude Code Plugin structure (.claude-plugin/, scripts/, hooks/) by default
+- **Scaffold**: Create canonical Claude Code Plugin structure (.claude-plugin/, core/, hooks/) by default
 - **Convert**: Transform existing Python libraries to plugins (brownfield conversion)
 - **Polish**: Transform repos into GitHub-ready portfolio artifacts (badges, CI/CD, CHANGELOG, metrics)
 - **Detect**: Intelligent gap detection identifies what's missing
@@ -74,15 +74,15 @@ This skill includes utility scripts and reference documentation:
 
 ### Constitution/Constraints
 - Per CLAUDE.md: Solo-dev environment with pragmatic solutions
-- **DEFAULT**: Claude Code Plugins for packages with hooks/skills (`.claude-plugin/`, `scripts/`, `hooks/`)
+- **DEFAULT**: Claude Code Plugins for packages with hooks/skills (`.claude-plugin/`, `core/`, `hooks/`)
 - **MIGRATION**: Convert existing Python libraries to plugins via brownfield conversion
 - **ADVANCED**: Pure Python libraries (pyproject.toml, src layout) only for backend code without Claude Code integration
 - Windows-compatible links: **Junctions for skill directories** (no admin required, Git-compatible), **Symlinks for individual files** (requires admin or Developer Mode)
 - Truthfulness required: Only claim what actually exists, don't fabricate features
 
 ### Technical Context
-- **DEFAULT**: Claude Code Plugins (`.claude-plugin/`, `scripts/`, `hooks/`) for packages with hooks/skills
-- **CONVERSION**: Brownfield Python library → Plugin conversion (src/ → scripts/)
+- **DEFAULT**: Claude Code Plugins (`.claude-plugin/`, `core/`, `hooks/`) for packages with hooks/skills
+- **CONVERSION**: Brownfield Python library → Plugin conversion (src/ → core/)
 - **ADVANCED**: Pure Python libraries (`src/`, `pyproject.toml`) for backend-only code (no hooks/skills)
 - Portfolio-quality README with badges, architecture flowchart, Quick Start
 - CI/CD workflows with status badges (Python libraries only)
@@ -283,14 +283,14 @@ elif [ -d "{{TARGET_DIR}}/src" ] || [ -f "{{TARGET_DIR}}/pyproject.toml" ]; then
         echo "Convert to Claude Code plugin?"
         echo "  • Removes pip install requirement"
         echo "  • Auto-registers hooks"
-        echo "  • Changes: src/ → scripts/, adds plugin.json/hooks.json"
+        echo "  • Changes: src/ → core/, adds plugin.json/hooks.json"
         echo ""
         read -p "Convert to plugin? (y/n): " CONVERT_TO_PLUGIN
         if [ "$CONVERT_TO_PLUGIN" = "y" ]; then
             PACKAGE_TYPE="brownfield-plugin"
             echo "✓ Proceeding with brownfield conversion..."
             echo ""
-            echo "Details: This will backup your current structure, migrate src/ to scripts/,"
+            echo "Details: This will backup your current structure, migrate src/ to core/,"
             echo "remove pyproject.toml, and add plugin configuration files."
             echo "Rollback available if needed."
         else
@@ -307,9 +307,9 @@ fi
 
 | Type | Trigger | Structure | Use Case | Recommendation |
 |------|---------|-----------|----------|----------------|
-| `claude-plugin` | `.claude-plugin/` directory exists | `.claude-plugin/` + `scripts/` + `hooks/` + README | **DEFAULT**: Packages with hooks/skills | ✅ **Primary pattern** |
-| `claude-plugin+mcp` | `.claude-plugin/` + `mcp_server.py` or `mcp/` | `.claude-plugin/` + `scripts/` + `hooks/` + `.mcp.json` | Plugins with MCP server | ✅ **For MCP integration** |
-| `brownfield-plugin` | Python library + user confirms | `src/` → `scripts/` conversion | Convert existing Python lib to plugin | ✅ **Migration path** |
+| `claude-plugin` | `.claude-plugin/` directory exists | `.claude-plugin/` + `core/` + `hooks/` + README | **DEFAULT**: Packages with hooks/skills | ✅ **Primary pattern** |
+| `claude-plugin+mcp` | `.claude-plugin/` + `mcp_server.py` or `mcp/` | `.claude-plugin/` + `core/` + `hooks/` + `.mcp.json` | Plugins with MCP server | ✅ **For MCP integration** |
+| `brownfield-plugin` | Python library + user confirms | `src/` → `core/` conversion | Convert existing Python lib to plugin | ✅ **Migration path** |
 | `python-library` | `src/` or `pyproject.toml` exists (no conversion) | `src/{{NAME}}/` + `tests/` + pyproject.toml | ⚠️ **ADVANCED**: Pure backend code (no hooks/skills) | ⚠️ **Only when plugins inappropriate** |
 | `claude-skill` | `SKILL.md` exists | `skill/` only (no `src/`, no pyproject.toml) | Standalone Claude skills | ℹ️ **For skill-only packages** |
 | `hook-package` | `hook/` directory exists | `hook/` + README | Legacy hook distribution | ℹ️ **Use plugin pattern instead** |
@@ -325,9 +325,9 @@ fi
 - [ ] Verify dependencies (use existing libraries, avoid reinventing)
 - [ ] Expand test coverage (unit + error paths + integration)
 
-**Summary**: Converts existing Python library (`src/` → `scripts/`) to Claude Code plugin structure with backup, verification, and rollback support. See `references/brownfield-conversion.md` for detailed 7-step workflow.
+**Summary**: Converts existing Python library (`src/` → `core/`) to Claude Code plugin structure with backup, verification, and rollback support. See `references/brownfield-conversion.md` for detailed 7-step workflow.
 
-**Rollback**: Backup created at `.backup/` before conversion. To rollback: `cp -r .backup/* . && rm -rf scripts/ .claude-plugin/`
+**Rollback**: Backup created at `.backup/` before conversion. To rollback: `cp -r .backup/* . && rm -rf core/ .claude-plugin/`
 
 ### Post-Conversion Verification (CRITICAL)
 
@@ -338,13 +338,13 @@ After brownfield conversion, check for broken symlinks that may still point to o
 cd P:/.claude/hooks
 ls -la | grep "src/"
 
-# If found, remove and recreate them with correct scripts/ paths:
+# If found, remove and recreate them with correct core/ paths:
 rm PreCompact_handoff_capture.py SessionStart_handoff_restore.py
 cmd /c "mklink PreCompact_handoff_capture.py p:\packages\handoff\core\hooks\PreCompact_handoff_capture.py"
 cmd /c "mklink SessionStart_handoff_restore.py p:\packages\handoff\core\hooks\SessionStart_handoff_restore.py"
 ```
 
-**Common pitfall**: Symlinks in `P:/.claude/hooks/` may still point to old `src/handoff/hooks/` path after conversion. Must point to `scripts/hooks/`.
+**Common pitfall**: Symlinks in `P:/.claude/hooks/` may still point to old `src/handoff/hooks/` path after conversion. Must point to `core/hooks/`.
 
 ## PHASE 1.7: Plugin Standards Validation (Auto-invoked)
 
@@ -415,12 +415,7 @@ if [ -f "pyproject.toml" ]; then
     FORBIDDEN="$FORBIDDEN\n❌ DELETE: pyproject.toml (plugins don't need pip packaging)"
 fi
 if [ -d "src" ]; then
-    FORBIDDEN="$FORBIDDEN\n❌ DELETE/MIGRATE: src/ (use scripts/ for plugins)"
-fi
-
-# Check for forbidden core/ directory (NOT in official plugin-dev:plugin-structure)
-if [ -d "core" ]; then
-    FORBIDDEN="$FORBIDDEN\n❌ DELETE/MIGRATE: core/ (use scripts/ for Python code)"
+    FORBIDDEN="$FORBIDDEN\n❌ DELETE/MIGRATE: src/ (use core/ for plugins)"
 fi
 
 # Check for non-standard files (artifact patterns)
@@ -442,7 +437,7 @@ echo "$FORBIDDEN"
 
 **DELETE** (violates plugin standards):
 - `pyproject.toml`, `setup.py`, `setup.cfg` - Plugins don't use pip
-- `src/` directory - Wrong structure, use `scripts/`
+- `src/` directory - Wrong structure, use `core/`
 - `*.backup`, `*.old`, `*.bak` - Backup files
 - `test_*.py`, `verify_*.py`, `analyze_*.py` - Temporary test scripts
 - `*SUMMARY*.md`, `*REPORT*.md`, `*CHECKLIST*.md` - Temporary documentation
@@ -505,7 +500,7 @@ echo "  Moved: $(grep -c "MOVE" <<<$FORBIDDEN) files to appropriate directories"
 
 ### ✅ Standards Compliant
 - .claude-plugin/ exists
-- scripts/ directory present
+- core/ directory present
 - hooks/ configuration present
 - README.md with badges
 
@@ -534,7 +529,7 @@ None - all violations can be auto-fixed.
 **Objective**: Create appropriate directory structure based on package type.
 
 **⚠️ ARCHITECTURE GUIDANCE**:
-- **DEFAULT**: Create Claude Code Plugins (`.claude-plugin/`, `scripts/`, `hooks/`) for packages with hooks/skills
+- **DEFAULT**: Create Claude Code Plugins (`.claude-plugin/`, `core/`, `hooks/`) for packages with hooks/skills
 - **MIGRATION**: Convert existing Python libraries to plugins via brownfield conversion
 - **ADVANCED**: Create pure Python libraries only when plugin architecture isn't appropriate (e.g., pure backend code with no Claude Code integration)
 
@@ -586,13 +581,14 @@ mkdir -p {{TARGET_DIR}}/skill
 │       └── SKILL.md
 ├── hooks/
 │   └── hooks.json             # Hook configuration
-├── scripts/                   # Python code
+├── core/                      # Python code
 │   ├── __init__.py
 │   ├── main.py
 │   └── utils/
 {% if HAS_MCP_SERVER %}
 ├── .mcp.json                  # MCP server config
 {% endif %}
+├── scripts/                   # OPTIONAL: Helper scripts
 ├── tests/
 ├── .gitignore
 ├── README.md
@@ -602,7 +598,7 @@ mkdir -p {{TARGET_DIR}}/skill
 **IMPORTANT**: Claude Code plugins use auto-discovered components:
 - `.claude-plugin/plugin.json` - Minimal manifest (name, description, author)
 - Components at ROOT level - commands/, agents/, skills/, hooks/
-- `scripts/` directory - Python code (NOT packages/hook/)
+- `core/` directory - Python code (NOT packages/hook/)
 {% if HAS_MCP_SERVER %}
 - `.mcp.json` - MCP server configuration (NOT mcp/ directory)
 {% endif %}
@@ -645,7 +641,7 @@ mkdir -p {{TARGET_DIR}}/tests
     "matcher": ".*",
     "hooks": [{
       "type": "command",
-      "command": "python CLAUDE_PLUGIN_ROOT/scripts/main.py"
+      "command": "python CLAUDE_PLUGIN_ROOT/core/main.py"
     }]
   }]
 }
@@ -662,7 +658,7 @@ mkdir -p {{TARGET_DIR}}/tests
 }
 ```
 {% endif %}
-4. **Create `scripts/__init__.py`**: (Python initialization)
+4. **Create `core/__init__.py`**: (Python initialization)
 5. **Create `.gitignore`**: (Exclude .local.md files)
 6. **Generate README.md** (see PHASE 3 templates)
 7. **Create LICENSE** (MIT)
@@ -695,7 +691,7 @@ ln -s /path/to/packages/{{package_name}}/skill ~/.claude/skills/{{package_name}}
 
 ## **2. HOOKS (Dev Deployment)**
 
-**For:** Packages with hook files (`.py` files in `scripts/hooks/`)
+**For:** Packages with hook files (`.py` files in `core/hooks/`)
 
 **Setup:**
 ```powershell
@@ -703,7 +699,7 @@ ln -s /path/to/packages/{{package_name}}/skill ~/.claude/skills/{{package_name}}
 cd P:/.claude/hooks
 
 # Symlink individual hook files from your package
-ln -sf P:/packages/{{package_name}}/scripts/hooks/HookName.py HookName.py
+ln -sf P:/packages/{{package_name}}/core/hooks/HookName.py HookName.py
 ```
 
 **Key points:**
@@ -786,11 +782,11 @@ ln -s /path/to/packages/my-plugin/skills/skill-c ~/.claude/skills/skill-c
 
 #### Multiple Hook Files (One Symlink Per File)
 
-If your plugin has multiple hook files in `scripts/hooks/`:
+If your plugin has multiple hook files in `core/hooks/`:
 
 ```
 my-plugin/
-└── scripts/
+└── core/
     └── hooks/
         ├── hook1.py  → Symlink 1
         ├── hook2.py  → Symlink 2
@@ -811,9 +807,9 @@ cmd /c "mklink hook3.py P:\packages\my-plugin\core\hooks\hook3.py"
 **macOS/Linux equivalent:**
 ```bash
 cd ~/.claude/hooks
-ln -sf /path/to/packages/my-plugin/scripts/hooks/hook1.py hook1.py
-ln -sf /path/to/packages/my-plugin/scripts/hooks/hook2.py hook2.py
-ln -sf /path/to/packages/my-plugin/scripts/hooks/hook3.py hook3.py
+ln -sf /path/to/packages/my-plugin/core/hooks/hook1.py hook1.py
+ln -sf /path/to/packages/my-plugin/core/hooks/hook2.py hook2.py
+ln -sf /path/to/packages/my-plugin/core/hooks/hook3.py hook3.py
 ```
 
 #### Both Skills AND Hooks
@@ -825,7 +821,7 @@ my-plugin/
 ├── skills/
 │   ├── skill-a/SKILL.md  → Junction to skills/skill-a/
 │   └── skill-b/SKILL.md  → Junction to skills/skill-b/
-└── scripts/
+└── core/
     └── hooks/
         ├── hook1.py  → Symlink in P:/.claude/hooks/
         └── hook2.py  → Symlink in P:/.claude/hooks/
@@ -966,7 +962,7 @@ ln -s /path/to/packages/{{package_name}}/skills/{{package_name}} ~/.claude/skill
 
 #### 2. HOOKS (Dev Deployment - Hook Files Only)
 
-**For**: When this package has hook files (\`.py\` files in \`scripts/hooks/\`) you want to test.
+**For**: When this package has hook files (\`.py\` files in \`core/hooks/\`) you want to test.
 
 **Setup:**
 \`\`\`powershell
@@ -974,7 +970,7 @@ ln -s /path/to/packages/{{package_name}}/skills/{{package_name}} ~/.claude/skill
 cd P:/.claude/hooks
 
 # Example: Symlink a specific hook file
-cmd /c "mklink HookName.py P:/packages/{{package_name}}/scripts/hooks/HookName.py"
+cmd /c "mklink HookName.py P:/packages/{{package_name}}/core/hooks/HookName.py"
 \`\`\`
 
 **Key points:**
@@ -1354,7 +1350,7 @@ The most common mistake is uploading only documentation files (README, CHANGELOG
 
 **Priority upload order:**
 1. **Review bundle** (generated via `/review_bundle`) - Architectural overview
-2. **Core implementation** - `scripts/*.py`, `*.py` (the actual code)
+2. **Core implementation** - `core/*.py`, `*.py` (the actual code)
 3. **Plugin configuration** - `.claude-plugin/plugin.json`, `hooks/hooks.json`
 4. **Tests** - `tests/*.py`
 5. **Skill documentation** - `SKILL.md` (if exists)
@@ -1535,6 +1531,117 @@ echo ""
 
 # === STEP 7: NOW generate assets (only after ALL uploads complete) ===
 echo "Starting asset generation..."
+
+
+### Video Compliance Verification & Regeneration (Option B Pipeline)
+
+**Objective**: Verify generated videos comply with technical writing standards and regenerate non-compliant videos using Option B (Script → TTS → ffmpeg).
+
+**When**: Automatically runs after video download (NotebookLM generation completes).
+
+**Why this matters**: NotebookLM videos often contain casual language ("cool", "awesome", "super") even with technical briefs. Option B provides full control over compliance with faster iteration than regenerating via NotebookLM.
+
+**Compliance standards**:
+- **Absolutely forbidden**: "cool", "awesome", "super", "amazing", "ultra", "mega", "neat", "nifty", "handy", "sweet", "sick", "dope", "fire"
+- **Marketing hype**: "game-changing", "revolutionary", "seamless", "transformative"
+- **Anti-patterns**: "imagine", "picture this", "envision"
+
+**Verification workflow with faster-whisper**:
+
+```bash
+# Step 1: Install faster-whisper if not available
+pip install faster-whisper
+
+# Step 2: Transcribe and verify video compliance
+python << 'VERIFY_EOF'
+from faster_whisper import WhisperModel
+import json
+import re
+
+FORBIDDEN_PATTERNS = [
+    r'super', r'cool', r'awesome', r'amazing',
+    r'ultra', r'mega', r'neat', r'nifty',
+    r'handy', r'sweet', r'sick', r'dope',
+    r'fire', r'game.?changing', r'revolutionary',
+    r'seamless', r'transformative', r'imagine',
+    r'picture this', r'envision'
+]
+
+def check_compliance(text):
+    violations = []
+    text_lower = text.lower()
+    for pattern in FORBIDDEN_PATTERNS:
+        matches = re.finditer(pattern, text_lower, re.IGNORECASE)
+        for match in matches:
+            violations.append({
+                'word': match.group(),
+                'position': match.start(),
+                'context': text[max(0, match.start()-30):min(len(text), match.end()+30)]
+            })
+    return violations
+
+# Transcribe
+model = WhisperModel("base", device="cpu", compute_type="int8")
+segments, info = model.transcribe("assets/videos/{package}_explainer.mp4", beam_size=5)
+
+# Check violations
+all_violations = []
+for segment in segments:
+    violations = check_compliance(segment.text.strip())
+    for v in violations:
+        all_violations.append({**v, 'time': f"{segment.start:.1f}-{segment.end:.1f}s"})
+
+# Save transcript with violations
+with open('assets/videos/{package}_transcript.json', 'w') as f:
+    json.dump({'violations': all_violations, 'count': len(all_violations)}, f)
+
+# Report
+if all_violations:
+    print(f"❌ FAILED: {len(all_violations)} violations found")
+    exit(1)
+else:
+    print("✅ PASSED: No forbidden words")
+    exit(0)
+VERIFY_EOF
+```
+
+**Option B regeneration pipeline** (if violations found):
+
+```bash
+# Step 1: Generate compliant script (no forbidden words)
+cat > assets/scripts/{package}_compliant_script.txt << 'SCRIPT_EOF'
+[Write technical script without forbidden words]
+SCRIPT_EOF
+
+# Step 2: Install free TTS (edge-tts)
+pip install edge-tts
+
+# Step 3: Generate compliant audio
+edge-tts --file assets/scripts/{package}_compliant_script.txt   --write-media assets/audio/{package}_compliant_audio.mp3
+
+# Step 4: Replace audio track using ffmpeg
+ffmpeg -i assets/videos/{package}_explainer.mp4   -i assets/audio/{package}_compliant_audio.mp3   -c:v copy -map 0:v:0 -map 1:a:0 -shortest   assets/videos/{package}_compliant.mp4 -y
+
+# Step 5: Re-verify compliance
+# Run faster-whisper verification again on compliant video
+```
+
+**Decision factors**:
+- **Speed**: Option B (2-3 minutes) vs NotebookLM regeneration (5-10 minutes + uncertain)
+- **Control**: Full script control vs AI generation variability
+- **Cost**: Free (edge-tts) vs NotebookLM credits
+- **Iteration**: Script changes are instant vs re-uploading sources to NotebookLM
+
+**Duration**: ~3-5 minutes for full verification + regeneration (if needed)
+
+**Output**: 
+- `assets/videos/{package}_transcript.json` - Transcript with violation markers
+- `assets/videos/{package}_compliant.mp4` - Compliant video (0 violations)
+- Verification report with violation count and locations
+
+**Integration**: Runs automatically after video download, before notebook cleanup
+
+
 
 **Notebook cleanup after asset generation:**
 
@@ -2168,12 +2275,12 @@ checklist=(
 
 ### v5.2.0 (2025-03-07)
 - ✅ Updated to Claude Code plugin best practices (v5.2 structure)
-- ✅ Added `scripts/` directory for Python code
+- ✅ Added `core/` directory for Python code
 - ✅ Added `hooks/hooks.json` for hook configuration
 - ✅ Added `.mcp.json` for MCP server configuration
 - ✅ Removed `pyproject.toml` (plugins don't need pip packaging)
 - ✅ Added local development setup (junctions/symlinks)
-- ✅ Added brownfield conversion workflow (src/ → scripts/)
+- ✅ Added brownfield conversion workflow (src/ → core/)
 - ✅ Enhanced progressive disclosure with references/
 - ✅ Reduced word count from 10,996 to ~4,000 words
 - ✅ Added Bundled Resources documentation

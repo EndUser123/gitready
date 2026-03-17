@@ -78,6 +78,9 @@ This skill includes utility scripts and reference documentation:
 - **MIGRATION**: Convert existing Python libraries to plugins via brownfield conversion
 - **ADVANCED**: Pure Python libraries (pyproject.toml, src layout) only for backend code without Claude Code integration
 - Windows-compatible links: **Junctions for skill directories** (no admin required, Git-compatible), **Symlinks for individual files** (requires admin or Developer Mode)
+  - **CRITICAL**: When using junctions for skill development, add the **junction target** to `.gitignore` to prevent dual git tracking
+  - Pattern: Track source (`packages/<name>/skill/`), ignore junction target (`.claude/skills/<name>/`)
+  - See: `P:/.claude/arch_decisions/2026-03-16_arch-skill-junction-git-strategy.md`
 - Truthfulness required: Only claim what actually exists, don't fabricate features
 
 ### Technical Context
@@ -1023,7 +1026,7 @@ cmd /c "mklink HookName.py P:/packages/{{package_name}}/core/hooks/HookName.py"
 
 [![Watch the demo with audio](assets/videos/{{package_name}}_video_poster.png)](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)
 
-> **[🎬 Watch the explainer in the browser](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)**  
+> **[🎬 Watch the explainer in the browser](https://{{github_username}}.github.io/{{package_name}}/docs/video.html)**
 > **[⬇️ Download the MP4 directly](https://github.com/{{github_username}}/{{package_name}}/releases/download/media/{{package_name}}_explainer_pbs.mp4)**
 > *Browser playback requires GitHub Pages to be enabled for this repository.*
 
@@ -1055,7 +1058,7 @@ graph TB
 
 [![Slide deck preview](assets/slides/{{package_name}}_slides_preview.png)](assets/slides/{{package_name}}_slides.pdf)
 
-**[📄 View Slides (PDF)](assets/slides/{{package_name}}_slides.pdf)**  
+**[📄 View Slides (PDF)](assets/slides/{{package_name}}_slides.pdf)**
 **[⬇️ Download PDF](assets/slides/{{package_name}}_slides.pdf)**
 
 *Use the PDF for both viewing and download on GitHub.*
@@ -1634,7 +1637,7 @@ ffmpeg -i assets/videos/{package}_explainer.mp4   -i assets/audio/{package}_comp
 
 **Duration**: ~3-5 minutes for full verification + regeneration (if needed)
 
-**Output**: 
+**Output**:
 - `assets/videos/{package}_transcript.json` - Transcript with violation markers
 - `assets/videos/{package}_compliant.mp4` - Compliant video (0 violations)
 - Verification report with violation count and locations

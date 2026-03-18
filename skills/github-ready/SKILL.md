@@ -2007,6 +2007,67 @@ graph TB
 
 ---
 
+## Asset Generation Tool Matrix
+
+**Which tool to use for each asset type**:
+
+| Asset Type | Primary Tool | Alternative Tools | When to Use Alternative |
+|------------|--------------|------------------|------------------------|
+| **Banner** | OpenRouter (DALL-E 3) | Canva, Figma, Adobe Express | Custom branding, precise text control |
+| **Architecture diagram** | NotebookLM | Mermaid, Canva, Figma | Need precise control, non-AI preference |
+| **System flowchart** | Mermaid | NotebookLM, PlantUML, draw.io | Prefer code-as-diagram, non-AI preference |
+| **Workflow flowchart** | Mermaid | NotebookLM, PlantUML, draw.io | Prefer code-as-diagram, non-AI preference |
+| **Explainer video** | NotebookLM | Loom, OBS + edit, HeyGen | Screen recording, avatar presenter, custom narration |
+| **Slide deck** | NotebookLM | Canva, Google Slides, PowerPoint | Custom branding, interactive elements |
+| **Video player page** | Auto-generated HTML | Manual HTML/CSS | Custom styling, interactive features |
+
+**Tool capabilities by asset type**:
+
+| Tool | Banner | Diagrams | Flowcharts | Video | Slides | HTML Page |
+|------|--------|----------|------------|-------|--------|-----------|
+| **NotebookLM** | ✅ | ✅ Best | ✅ | ✅ Best | ✅ Best | ❌ |
+| **OpenRouter** | ✅ Best | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Mermaid** | ❌ | ✅ | ✅ Best | ❌ | ❌ | ❌ |
+| **Canva** | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
+| **Figma** | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
+| **Loom** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **OBS Studio** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **HeyGen** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **draw.io** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **PlantUML** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **VS Code** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ Manual |
+
+**Legend**:
+- ✅ = Can generate this asset type
+- ✅ Best = Best-in-class for this asset type
+- ❌ = Cannot generate this asset type
+
+**Recommendations by asset type**:
+
+| Asset | Use This Tool | Why |
+|-------|--------------|-----|
+| **Banner** | OpenRouter (integrated) | AI-generated, matches package theme, auto-created |
+| **Architecture diagram** | NotebookLM (integrated) | Analyzes code, generates accurate overview |
+| **Flowcharts** | Mermaid (integrated) | Code-as-diagram, version controlled, GitHub-native |
+| **Explainer video** | NotebookLM (integrated) | AI-narrated, technical tone, from sources |
+| **Slide deck** | NotebookLM (integrated) | AI-generated, matches video content |
+| **Video player page** | Auto-generated (integrated) | Zero setup, GitHub Pages ready |
+
+**When to deviate from defaults**:
+
+| Situation | Use Alternative Tool |
+|----------|----------------------|
+| Need custom branding on banner | Canva/Figma |
+| Prefer manual diagram control | Mermaid (still integrated) |
+| Want avatar presenter | HeyGen/Synthesia |
+| Screen recording demo | Loom/OBS |
+| Interactive slide features | Canva/Google Slides |
+| Non-technical diagram style | Figma/draw.io |
+
+**Note**: The `/github-ready` skill automates NotebookLM, OpenRouter, and Mermaid generation. Alternative tools require manual work outside the automated workflow.
+
+---
+
 ## Alternative Video Generation Tools
 
 **When to use alternatives**: NotebookLM is the default, but other tools may better fit your use case.

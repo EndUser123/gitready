@@ -1,10 +1,10 @@
 {
   "current_intent": {
     "work_type": "unknown",
-    "target": "s also about making them perfect for resume material. So video upload is required.  But you should have already added those instructions earlier. There should be instructions on using Notebook LM, on using other video generation tools, and how to upload those videos as assets and link them to the GitHub repo page.  Please make sure that",
-    "problem": "Your understanding of the core mission is flawed. The skill is about creating and publishing packages, but it's also about making them perfect for resume material. So video upload is required.  But...",
-    "user_prompt": "Your understanding of the core mission is flawed. The skill is about creating and publishing packages, but it's also about making them perfect for resume material. So video upload is required.  But you should have already added those instructions earlier. There should be instructions on using Notebook LM, on using other video generation tools, and how to upload those videos as assets and link them to the GitHub repo page.  Please make sure that's all true.",
-    "timestamp": "2026-03-18T22:56:15.276780+00:00"
+    "target": "What assets does /github-ready require? (videos, diagrams, slides, banners)",
+    "problem": "\"What assets does /github-ready require? (videos, diagrams, slides, banners)\", you can find this in the skill, and if you can't, you can find the skill in git that has this info.\n\nkeep the content ...",
+    "user_prompt": "\"What assets does /github-ready require? (videos, diagrams, slides, banners)\", you can find this in the skill, and if you can't, you can find the skill in git that has this info.\n\nkeep the content don't throw anything away yet, add missing content, have a table.",
+    "timestamp": "2026-03-18T23:39:54.358595+00:00"
   },
-  "last_updated": "2026-03-18T22:56:15.280889+00:00"
+  "last_updated": "2026-03-18T23:39:54.364174+00:00"
 }

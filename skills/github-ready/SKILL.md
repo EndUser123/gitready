@@ -1,7 +1,7 @@
 ---
 name: github-ready
-version: 5.8.0
-description: This skill should be used when the user asks to "create a package", "scaffold a Python library", "make a GitHub-ready repo", "generate badges", "set up CI/CD", "convert to plugin", "brownfield conversion", "validate plugin standards", or mentions package scaffolding, portfolio polish, repository structure setup, badge generation, or plugin standards validation. **DEFAULT**: Creates Claude Code Plugins for all new packages. Python libraries require explicit confirmation for PyPI/non-Claude usage. Creates GitHub-ready Python libraries, Claude skills, and Claude Code plugins with badges, CI/CD workflows, coverage metrics, media artifacts, automatic plugin standards validation, and Python import/path validation.
+version: 5.9.0
+description: This skill should be used when the user asks to "create a package", "scaffold a Python library", "make a GitHub-ready repo", "generate badges", "set up CI/CD", "convert to plugin", "brownfield conversion", "validate plugin standards", or mentions package scaffolding, portfolio polish, repository structure setup, badge generation, or plugin standards validation. **DEFAULT**: Creates Claude Code Plugins for all new packages. Python libraries require explicit confirmation for PyPI/non-Claude usage. Creates GitHub-ready Python libraries, Claude skills, and Claude Code plugins with badges, CI/CD workflows, coverage metrics, media artifacts, automatic plugin standards validation, Python import/path validation, and GitHub publication functionality.
 category: scaffolding
 triggers:
   - /github-ready
@@ -17,13 +17,13 @@ workflow_steps:
   - generate_badges
   - create_documentation
   - validate_package
+  - github_publication
   - cleanup_obsolete_files
 
 suggest:
   - /init
-  - /github-public-posting
 ---
-# /github-ready — Universal Package Creator & Portfolio Polisher v5.8.0
+# /github-ready — Universal Package Creator & Portfolio Polisher v5.9.0
 
 ## Purpose
 
@@ -1125,6 +1125,111 @@ ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:no
 ```
 
 **For brownfield conversions**: See \`references/brownfield-conversion.md\` for README update instructions (migration notice, rollback instructions, updated usage examples).
+
+### Create Required Documentation Files
+
+**CRITICAL**: All packages MUST have these files for GitHub readiness:
+
+```bash
+# 1. Create AGENTS.md from template
+if [ ! -f "{{TARGET_DIR}}/AGENTS.md" ]; then
+  cat > "{{TARGET_DIR}}/AGENTS.md" << 'AGENTS_EOF'
+# AGENTS.md
+
+> AI-maintainable documentation for the {{package_name}} package.
+
+## Package Overview
+
+**{{package_name}}** is a {{package_type}} that {{one_sentence_description}}.
+
+## Directory Structure
+
+\`\`\`
+{{package_name}}/
+├── .claude-plugin/         # Plugin metadata
+├── core/                   # Python source code
+├── hooks/                 # Hook configuration
+├── tests/                 # Tests
+├── README.md
+├── CHANGELOG.md
+├── LICENSE
+└── AGENTS.md              # This file
+\`\`\`
+
+## Development Setup
+
+{{local_dev_instructions}}
+
+## Running Tests
+
+\`\`\`bash
+pytest tests/ -v
+\`\`\`
+AGENTS_EOF
+  echo "✓ Created AGENTS.md"
+else
+  echo "✓ AGENTS.md already exists"
+fi
+
+# 2. Create CHANGELOG.md from template
+if [ ! -f "{{TARGET_DIR}}/CHANGELOG.md" ]; then
+  cat > "{{TARGET_DIR}}/CHANGELOG.md" << 'CHANGELOG_EOF'
+# Changelog
+
+All notable changes to {{package_name}} will be documented in this file.
+
+## [Unreleased]
+
+### Added
+- Initial release
+CHANGELOG_EOF
+  echo "✓ Created CHANGELOG.md"
+else
+  echo "✓ CHANGELOG.md already exists"
+fi
+
+# 3. Create CONTRIBUTING.md from template
+if [ ! -f "{{TARGET_DIR}}/CONTRIBUTING.md" ]; then
+  cat > "{{TARGET_DIR}}/CONTRIBUTING.md" << 'CONTRIBUTING_EOF'
+# Contributing to {{package_name}}
+
+Thanks for your interest in contributing!
+
+## Development Setup
+
+\`\`\`bash
+# Clone and setup
+git clone https://github.com/{{username}}/{{package_name}}.git
+cd {{package_name}}
+\`\`\`
+
+## Testing
+
+\`\`\`bash
+pytest tests/ -v
+\`\`\`
+
+## Pull Requests
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+CONTRIBUTING_EOF
+  echo "✓ Created CONTRIBUTING.md"
+else
+  echo "✓ CONTRIBUTING.md already exists"
+fi
+```
+
+**Verification**: Check that all three files exist:
+```bash
+ls -1 {{TARGET_DIR}}/{AGENTS.md,CHANGELOG.md,CONTRIBUTING.md}
+```
+
+---
+
 ## PHASE 4: Validate (1min)
 
 **Objective**: Verify package structure is correct.
@@ -2217,6 +2322,48 @@ jobs:
         pytest tests/ -v --cov=core --cov-report=term
 ```
 
+**Implementation - Create CI/CD Workflow:**
+
+```bash
+# Create .github/workflows directory
+mkdir -p "{{TARGET_DIR}}/.github/workflows"
+
+# Create test workflow
+cat > "{{TARGET_DIR}}/.github/workflows/test.yml" << 'CI_EOF'
+name: Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.14'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov
+
+    - name: Run tests
+      run: |
+        pytest tests/ -v --cov=core --cov-report=term
+CI_EOF
+
+echo "✓ Created .github/workflows/test.yml"
+```
+
 **IMPORTANT:**
 - ❌ **NO Codecov integration** - Do NOT upload coverage to external services
 - ✅ Local coverage reporting only (--cov-report=term)
@@ -2229,8 +2376,245 @@ jobs:
 - Test coverage reporting and badges
 
 **Output**: Portfolio-ready repository with badges, CI/CD, docs, and examples.
-## PHASE 6: Cleanup (Auto-invoked)**Objective**: Detect and remove obsolete files after refactoring/scaffolding.**When**: Automatically runs after PHASE 5 (Portfolio Polish) completes.**What this detects**:- **Backup files** (*.backup-*, *.old, *.bak) - Shows file size and removal command- **Orphaned test files** - Tests for modules that no longer exist- **Obsolete documentation** - Old CHANGELOGs, phase completion docs, verification docs- **Duplicate implementations** - Known refactoring patterns (e.g., skill_enforcement → skill_first_gate)**Output**: `CLEANUP_REPORT.md` with:- Categorized list of files to remove- Evidence for why each should be removed- Bulk removal commands ready to run- Commit message template**Usage**: Review report and manually remove files (recommended for first run).
-## PHASE 7: Git Ready (Auto-invoked)**Objective**: Initialize git repository and create initial commit.**When**: Automatically runs after PHASE 4 (Validate) completes.**What this does**:- Initialize git repository (if not already a git repo): `git init`- Add all files and create initial commit: `git commit -m "Initial commit: Package scaffold..."`- Set main branch: `git branch -M main`- Skips if `.git/` directory already exists**Manual steps** (user does when ready):- Add remote: `git remote add origin https://github.com/{{USERNAME}}/{{NAME}}.git`- Push to GitHub: `git push -u origin main`## PHASE 7: Recruiter Readiness Validation (Auto-invoked)**Objective**: Validate package is showcase-ready for recruiters before GitHub posting.**When**: Automatically runs after PHASE 5 (Portfolio Polish) completes.**Checks performed**:- TODO comments in pyproject.toml (suggests incomplete work)- Plan files in root (looks messy/unprofessional)- Missing CI/CD workflow (reduces perceived professionalism)- No tests directory (lack of quality evidence)- Version is 0.0.x or 0.1.x (suggests experimental/unstable)**Scoring**: 90-100 (Excellent), 70-89 (Good), 50-69 (Fair), <50 (Poor)**Auto-fixes available**: Remove TODOs, move plan files to docs/planning/, create CI/CD workflow, bump version to 0.5.0 or 1.0.0.**Output**: `RECRUITER_READINESS_REPORT.md` with score, issues found, and one-command fixes.
+
+---
+
+## PHASE 6: GitHub Publication (End-to-End)
+
+**Objective**: Publish package to GitHub with complete repository creation, monorepo extraction, and verification.
+
+**Trigger**: Explicitly invoked with `/github-ready <package> --publish` or after user confirmation in PHASE 5.
+
+**What this does**:
+- Extracts package from monorepo (if needed)
+- Creates GitHub repository via API/CLI
+- Automates author/license field population
+- Runs package-specific validation
+- Verifies publication success
+
+**Prerequisites**:
+- GitHub CLI (`gh`) installed and authenticated (recommended)
+- OR `GITHUB_TOKEN` environment variable set
+- Git 2.30+ (for `git subtree split`)
+
+**Workflow**: EXTRACT → CREATE → CONFIGURE → VALIDATE → VERIFY
+
+### PHASE 6.1: Extract from Monorepo (if needed)
+
+**Objective**: Extract package from monorepo structure as standalone repository.
+
+**Detection**: Check if target is inside a monorepo structure
+
+```bash
+# Detect monorepo membership
+if [[ "$(git -C "$TARGET_DIR" remote -v)" == *"P.git"* ]] || [[ "$TARGET_DIR" == *"/packages/"* ]]; then
+    IN_MONOREPO=true
+fi
+```
+
+**Extraction Methods:**
+
+**Option A: Subtree Split (preserves history)**
+```bash
+# Extract package history from monorepo
+git subtree split --prefix=packages/$NAME --branch=split-$NAME
+```
+
+**Option B: Fresh Init (clean slate)**
+```bash
+# Create new git repo with fresh history
+cd "$TARGET_DIR"
+rm -rf .git
+git init
+git add .
+git commit -m "Initial commit of $NAME"
+```
+
+**Decision Matrix:**
+- Use **subtree split** if: Package has meaningful commit history worth preserving
+- Use **fresh init** if: Package is new, or monorepo history is noisy/irrelevant
+
+**Script**: `packages/github-ready/scripts/extract_from_monorepo.sh`
+
+### PHASE 6.2: Create GitHub Repository
+
+**Objective**: Create GitHub repository and push code.
+
+**Implementation:**
+```bash
+# Create GitHub repository
+gh repo create "$NAME" \
+    --public \
+    --description="$DESCRIPTION" \
+    --source="$TARGET_DIR" \
+    --remote=origin \
+    --push
+```
+
+**Fallback (manual instructions):**
+If `gh` not available, display manual creation steps with curl API example.
+
+**Script**: `packages/github-ready/scripts/create_github_repo.sh`
+
+### PHASE 6.3: Author/License Automation
+
+**Objective**: Auto-populate author and license fields.
+
+**Detect/Configure Author:**
+
+```bash
+# Auto-detect from git config
+GIT_NAME=$(git config user.name)
+GIT_EMAIL=$(git config user.email)
+
+# Fallback to env vars
+if [[ -z "$GIT_NAME" ]]; then
+    GIT_NAME="${AUTHOR_NAME:-Your Name}"
+fi
+```
+
+**Update plugin.json:**
+```json
+{
+  "name": "{{package_name}}",
+  "description": "{{DESCRIPTION}}",
+  "author": {
+    "name": "{{AUTHOR_NAME}}",
+    "email": "{{AUTHOR_EMAIL}}"
+  }
+}
+```
+
+**License Detection/Generation:**
+- Scan for existing LICENSE file
+- If missing, generate MIT license with detected author info
+- Update `.claude-plugin/plugin.json` with license field
+
+### PHASE 6.4: Package-Specific Validation
+
+**Objective**: Run validation checks specific to package type.
+
+**Configuration**: `packages/github-ready/resources/package_validations.json`
+
+**Target-Specific Checks:**
+
+| Package Type | Validation Checks |
+|--------------|-------------------|
+| `search-research` | - API key documentation present<br>- Provider list complete<br>- Test coverage for web backends |
+| `skill-guard` | - Compliance rules documented<br>- Validation examples provided<br>- Hook stderr compliance verified |
+| `loop-core` | - Terminal isolation documented<br>- State management tests present<br>- Multi-terminal safety verified |
+| **generic** | - All plugin standards (PHASE 1.7)<br>- Platform compatibility (PHASE 4)<br>- Python import validation (PHASE 4) |
+
+**Implementation:**
+```bash
+# Load validation rules from package_validations.json
+VALIDATIONS=$(jq ".package_types.$PACKAGE_TYPE.validations" package_validations.json)
+
+# Run each validation check
+for validation in $(echo "$VALIDATIONS" | jq -r '.[] | @base64'); do
+    # Run check and report result
+done
+```
+
+**Severity Levels:**
+- **critical**: Must fix before publication - blocks GitHub creation
+- **error**: Should fix before publication - strongly recommended
+- **warning**: Consider fixing before publication - quality improvement
+- **info**: Informational - no action required
+
+### PHASE 6.5: Verification
+
+**Objective**: Verify publication was successful.
+
+**Post-Publication Checks:**
+
+```bash
+# 1. Verify repository exists
+gh repo view "$NAME" --json name,url,visibility
+
+# 2. Verify README renders
+curl -s "https://raw.githubusercontent.com/$USER/$NAME/main/README.md" | head -20
+
+# 3. Verify badges load
+# (Parse README for badge URLs and check HTTP 200)
+
+# 4. Create summary report
+cat > GITHUB_PUBLISHED.md <<EOF
+# GitHub Publication Complete
+
+**Repository:** https://github.com/$USER/$NAME
+**Visibility:** Public
+**Initial Release:** v${VERSION}
+
+## Next Steps
+- [ ] Add topics/tags to repo
+- [ ] Enable GitHub Actions (if applicable)
+- [ ] Create first meaningful release
+EOF
+```
+
+**Output**: `GITHUB_PUBLISHED.md` with repository URL, visibility status, and next steps.
+
+---
+
+## PHASE 7: Cleanup (Auto-invoked)
+
+**Objective**: Detect and remove obsolete files after refactoring/scaffolding.
+
+**When**: Automatically runs after PHASE 6 (GitHub Publication) or PHASE 5 (Portfolio Polish) completes.
+
+**What this detects**:
+- **Backup files** (*.backup-*, *.old, *.bak) - Shows file size and removal command
+- **Orphaned test files** - Tests for modules that no longer exist
+- **Obsolete documentation** - Old CHANGELOGs, phase completion docs, verification docs
+- **Duplicate implementations** - Known refactoring patterns (e.g., skill_enforcement → skill_first_gate)
+
+**Output**: `CLEANUP_REPORT.md` with:
+- Categorized list of files to remove
+- Evidence for why each should be removed
+- Bulk removal commands ready to run
+- Commit message template
+
+**Usage**: Review report and manually remove files (recommended for first run).
+
+---
+
+## PHASE 8: Git Ready & Recruiter Validation (Auto-invoked)
+
+### PHASE 8.1: Git Ready
+
+**Objective**: Initialize git repository and create initial commit.
+
+**When**: Automatically runs after PHASE 4 (Validate) completes.
+
+**What this does**:
+- Initialize git repository (if not already a git repo): `git init`
+- Add all files and create initial commit: `git commit -m "Initial commit: Package scaffold..."`
+- Set main branch: `git branch -M main`
+- Skips if `.git/` directory already exists
+
+**Manual steps** (user does when ready):
+- Add remote: `git remote add origin https://github.com/{{USERNAME}}/{{NAME}}.git`
+- Push to GitHub: `git push -u origin main`
+
+### PHASE 8.2: Recruiter Readiness Validation
+
+**Objective**: Validate package is showcase-ready for recruiters before GitHub posting.
+
+**When**: Automatically runs after PHASE 5 (Portfolio Polish) completes.
+
+**Checks performed**:
+- TODO comments in pyproject.toml (suggests incomplete work)
+- Plan files in root (looks messy/unprofessional)
+- Missing CI/CD workflow (reduces perceived professionalism)
+- No tests directory (lack of quality evidence)
+- Version is 0.0.x or 0.1.x (suggests experimental/unstable)
+
+**Scoring**: 90-100 (Excellent), 70-89 (Good), 50-69 (Fair), <50 (Poor)
+
+**Auto-fixes available**: Remove TODOs, move plan files to docs/planning/, create CI/CD workflow, bump version to 0.5.0 or 1.0.0.
+
+**Output**: `RECRUITER_READINESS_REPORT.md` with score, issues found, and one-command fixes.
 
 ## Integration
 
@@ -2325,6 +2709,14 @@ checklist=(
 ```
 
 ## Changelog
+
+### v5.9.0 (2026-03-18)
+- ✅ **ADDED TEMPLATES**: Created resources/AGENTS.template.md, CHANGELOG.template.md, CONTRIBUTING.template.md
+- ✅ **EXPLICIT FILE CREATION**: Added implementation code in PHASE 3 to create AGENTS.md, CHANGELOG.md, CONTRIBUTING.md
+- ✅ **CI/CD IMPLEMENTATION**: Added implementation code in PHASE 5 to create .github/workflows/test.yml
+- ✅ **FIXED DOCUMENTATION GAP**: Skill now has actual templates instead of just claiming to generate them
+- ✅ **LEARNED FROM**: Package audit showing most packages missing AGENTS.md, CHANGELOG.md, CI/CD workflows
+- ✅ **GAP ANALYSIS**: Identified that 5/7 packages missing AGENTS.md, 4/7 missing CI/CD, 3/7 missing CHANGELOG.md
 
 ### v5.8.0 (2026-03-18)
 - ✅ **DEFAULT TO CLAUDE CODE PLUGINS**: Changed package type detection to default to Claude Code Plugins for ALL new packages

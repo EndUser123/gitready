@@ -2007,6 +2007,166 @@ graph TB
 
 ---
 
+## Alternative Video Generation Tools
+
+**When to use alternatives**: NotebookLM is the default, but other tools may better fit your use case.
+
+### Quick Comparison
+
+| Tool | Best For | Cost | Pros | Cons |
+|------|----------|------|------|------|
+| **NotebookLM** | Technical architecture walkthroughs | Free | AI-generated from sources, no editing needed | Limited control over style |
+| **Veed.io** | Screen recordings + editing | Freemium | Easy editing, auto-captions, templates | Watermark on free tier |
+| **HeyGen** | AI avatar videos | Paid | Professional avatar, lip-sync | Expensive, uncanny valley risk |
+| **Loom** | Quick screen recordings | Freemium | One-click recording, hosting included | Limited editing, time limits |
+| **OBS Studio** | Professional screen recording | Free | Full control, no watermarks | Steeper learning curve |
+| **Camtasia** | Polished tutorial videos | Paid | Professional editing, animations | Expensive ($300+) |
+
+### Manual Screen Recording (OBS Studio)
+
+**When**: You want full control over the video content and style.
+
+**Setup** (one-time):
+```bash
+# Install OBS Studio
+# Windows: https://obsproject.com/download
+# macOS: brew install --cask obs
+# Linux: sudo apt install obs-studio
+```
+
+**Recording workflow**:
+1. Open OBS Studio
+2. Add **Screen Capture** source (select your IDE/browser)
+3. Add **Microphone/Audio** input if narrating
+3. Set recording resolution: 1920x1080 or 1280x720
+3. Click **Start Recording**
+4. Demonstrate your package: show workflow, explain architecture
+5. Click **Stop Recording**
+6. Output: `~/Videos/OBS/{date-time}.mkv`
+
+**Post-processing** (optional):
+- Trim intro/outro with **LosslessCut** (fast, no re-encoding)
+- Convert to MP4: `ffmpeg -i input.mkv -c:v libx264 -c:a aac output.mp4`
+- Compress for web: `ffmpeg -i output.mp4 -vcodec libx264 -crf 28 output_small.mp4`
+
+### Loom (Quick Screen Recordings)
+
+**When**: Rapid recording without editing complexity.
+
+**Workflow**:
+1. Install Loom desktop app or browser extension
+2. Click **New Recording**
+3. Select screen + camera + microphone
+4. Record your workflow (3-5 minute limit on free tier)
+5. Loom uploads and provides shareable link
+6. Download MP4 from Loom for GitHub asset hosting
+
+**Note**: Loom hosts videos on their servers. For portfolio-ready packages, download and host in your GitHub repo.
+
+### AI Avatar Videos (HeyGen, Synthesia)
+
+**When**: Professional presentation with AI presenter.
+
+**Workflow**:
+1. Script your explainer (120-200 words recommended)
+2. Choose avatar and voice
+3. Upload script or use text-to-speech
+4. Generate video (takes 5-10 minutes)
+5. Download MP4 for GitHub asset hosting
+
+**Note**: These services are expensive ($30-100/month). Use only if professional appearance is critical for your portfolio.
+
+---
+
+## Video Upload to GitHub
+
+**Objective**: Host explainer videos in your GitHub repository for portfolio display.
+
+**Two approaches**:
+1. **Automated upload** via `upload_github_videos.py` (Playwright browser automation)
+2. **Manual upload** via GitHub web interface (drag-and-drop)
+
+### Method 1: Automated Upload (Recommended)
+
+**Script**: `scripts/upload_github_videos.py`
+
+**Requirements**:
+```bash
+pip install playwright
+playwright install chromium
+```
+
+**Usage**:
+```bash
+cd P:/packages/github-ready
+python scripts/upload_github_videos.py
+```
+
+**What it does**:
+1. Opens GitHub README edit page in browser
+2. Saves session (first run requires manual login, then persists)
+3. Uploads videos from `assets/videos/` to GitHub user-images CDN
+4. Extracts CDN links from editor content
+5. Generates README update instructions
+
+**Features**:
+- Session persistence (login once, reuse for future uploads)
+- Works with both new (contenteditable) and old (CodeMirror) GitHub editors
+- Automatic retry with timeout handling
+- Handles multiple videos in one run
+
+**Video file naming** (expected by script):
+- `github-ready_explainer_video.mp4` → mapped to `explainer_video`
+- `github-ready_explainer_podcast.mp4` → mapped to `explainer_podcast`
+
+**For other packages**, edit the script's `video_files` dict:
+```python
+video_files = {
+    'my_package_explainer.mp4': 'explainer_video',
+    'my_package_demo.mp4': 'demo_video'
+}
+```
+
+### Method 2: Manual Upload (Fallback)
+
+**When**: Playwright unavailable, or browser automation fails.
+
+**Steps**:
+1. Navigate to `https://github.com/{username}/{repo}/edit/main/README.md`
+2. Locate the markdown editor (center of page)
+3. **Drag and drop** your video file directly into the editor
+4. GitHub uploads to user-images CDN and inserts the link automatically
+5. Copy the inserted URL (format: `https://user-images.githubusercontent.com/.../mp4`)
+6. Use the URL in your README video section
+
+**Manual README update**:
+```markdown
+## Explainer Video
+
+<video src="https://user-images.githubusercontent.com/.../...mp4" controls style="max-width: 730px; margin: 10px 0;">
+</video>
+```
+
+**GitHub Pages alternative** (for cleaner embedding):
+
+Instead of CDN links, use GitHub Pages:
+1. Enable GitHub Pages: Settings → Pages → Source: `docs/` folder
+2. Create `docs/video.html` (see README.md "Video Hosting Pattern" section)
+3. Link README to `https://{username}.github.io/{repo}/docs/video.html`
+
+**Which method to use?**
+
+| Situation | Use This Method |
+|----------|-----------------|
+| Multiple packages, frequent updates | Automated (upload_github_videos.py) |
+| One-off upload, quick fix | Manual (drag-and-drop) |
+| Want cleaner video player page | GitHub Pages (docs/video.html) |
+| Need browser playback support | GitHub Pages (docs/video.html) |
+
+**Note**: The `finalize_github_repo.py` script (PHASE 7) automatically enables GitHub Pages for your repository.
+
+---
+
 ## PHASE 5: Portfolio Polish (Auto-invoked after creation)
 
 **Objective**: Transform package into portfolio-quality GitHub artifact.

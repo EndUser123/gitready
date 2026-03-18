@@ -281,8 +281,6 @@ Quality scan report with:
 
 ## Development and Deployment
 
-## Development and Deployment
-
 ### Three Deployment Models
 
 **IMPORTANT**: This package supports three different deployment modes. Choose the right one for your use case.

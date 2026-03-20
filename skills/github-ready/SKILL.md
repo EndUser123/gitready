@@ -1,6 +1,6 @@
 ---
 name: github-ready
-version: 5.14.0
+version: 5.13.0
 description: This skill should be used when the user asks to "create a package", "scaffold a Python library", "make a GitHub-ready repo", "generate badges", "set up CI/CD", "convert to plugin", "brownfield conversion", "validate plugin standards", or mentions package scaffolding, portfolio polish, repository structure setup, badge generation, or plugin standards validation. Creates GitHub-ready Python libraries, Claude skills, and Claude Code plugins with badges, CI/CD workflows, coverage metrics, media artifacts, and automatic plugin standards validation. Now includes PHASE 6: GitHub Publication and PHASE 7: Repository Finalization.
 category: scaffolding
 triggers:
@@ -24,7 +24,7 @@ workflow_steps:
 suggest:
   - /init
 ---
-# /github-ready — Universal Package Creator & Portfolio Polisher v5.14.0
+# /github-ready — Universal Package Creator & Portfolio Polisher v5.13.0
 
 ## Purpose
 
@@ -1244,15 +1244,23 @@ meta_review_summary = {
 
 **Generated Assets:**
 
-| Asset | Purpose | Tool | Time | Output Formats |
-|-------|---------|------|------|---------------|
-| **Banner** | GitHub social preview | OpenRouter | ~30s | `assets/banners/{package}_banner.png` |
-| **Architecture overview image** | Visual system overview | NotebookLM | ~2min | `assets/infographics/{package}_architecture.png` |
-| **System overview flowchart** | GitHub-safe architecture view | Mermaid | ~1min | `docs/diagrams/system_overview.mmd` |
-| **Workflow flowchart** | Phase-by-phase pipeline view | Mermaid | ~1min | `docs/diagrams/workflow.mmd` |
-| **Video player page** | Browser playback via GitHub Pages | Static HTML | ~30s | `docs/video.html` |
-| **Explainer video** | AI-narrated technical walkthrough | NotebookLM | ~1-3min target | `assets/videos/{package}_explainer_pbs.mp4` |
-| **Slide deck** | Interactive presentation | NotebookLM | ~2min | `assets/slides/{package}_slides.pdf` (view and download as PDF) |
+| Asset | Purpose | Tools (recommended first) | Time | Output Formats |
+|-------|---------|---------------------------|------|---------------|
+| **Banner** | GitHub social preview (1200×630) | OpenRouter (DALL-E 3), Midjourney, Stable Diffusion, PIL (manual) | ~30s | `assets/banners/{package}_banner.png` |
+| **Architecture overview image** | Visual system overview | NotebookLM, DALL-E 3, Mermaid → PNG, PlantUML, Graphviz | ~2min | `assets/infographics/{package}_architecture.png` |
+| **System overview flowchart** | GitHub-safe architecture view | Mermaid, PlantUML, Graphviz DOT, draw.io | ~1min | `docs/diagrams/system_overview.mmd` |
+| **Workflow flowchart** | Phase-by-phase pipeline view | Mermaid, PlantUML, Graphviz DOT | ~1min | `docs/diagrams/workflow.mmd` |
+| **Explainer video** | AI-narrated technical walkthrough | NotebookLM, Luma Dream Machine, Runway Gen-3, HeyGen | ~1-3min target | `assets/videos/{package}_explainer_pbs.mp4` |
+| **Slide deck** | Interactive presentation | NotebookLM, Marp, Pandoc, PowerPoint | ~2min | `assets/slides/{package}_slides.pdf` |
+| **Video player page** | Browser playback via GitHub Pages | Static HTML, GitHub default (no player) | ~30s | `docs/video.html` |
+
+**Tool selection notes:**
+- **NotebookLM**: Best for comprehensive assets (infographics + videos + slides) from source code analysis
+- **OpenRouter/DALL-E 3**: Best for branded banner generation with text rendering
+- **Mermaid**: Best for code-as-diagram flowcharts that render directly in GitHub
+- **PIL (Python Imaging Library)**: Manual fallback for simple gradient/text banners
+- **Marp**: Markdown-based slide deck alternative with GitHub rendering
+- **PlantUML**: Alternative to Mermaid for UML-specific diagrams
 
 **Auto-skip conditions:**
 - No README images detected (`.gif`, `.png` in README)
@@ -1816,9 +1824,45 @@ SUMMARY (10-15s): Close with the practical result for a developer using the pack
 - the result often sounds generic even when the source material is technical
 
 **Quality verification:**
+
+### Banner Validation (`validate_banner.py`)
+
+After banner generation, automatically validate quality using `scripts/validate_banner.py`:
+
+**Basic checks (always run):**
+- File exists and readable
+- Dimensions: 1200×630 (GitHub social preview standard)
+- File size: 10KB - 500KB (reasonable range)
+- Image not corrupted
+
+**Vision analysis (requires `Z_AI_API_KEY`):**
+- Text readability (contrast ratio ≥ 4.5:1)
+- Package name visibility
+- Professionalism assessment
+- Visual appeal rating (1-10 scale)
+- Specific issues + recommendations
+
+**Usage:**
+```bash
+# Basic validation only
+python scripts/validate_banner.py assets/banners/{package}_banner.png
+
+# With Z.ai Vision API (requires Z_AI_API_KEY env var)
+python scripts/validate_banner.py assets/banners/{package}_banner.png
+
+# Exit with error if validation fails
+python scripts/validate_banner.py assets/banners/{package}_banner.png --fail-on-issues
+```
+
+**Quality criteria:**
+- **Excellent** (8-10): Ready for portfolio use
+- **Good** (6-7): Acceptable, minor improvements possible
+- **Needs improvement** (<6): Should regenerate before publishing
+
+**Other asset verification:**
 - Check assets contain package name
 - Verify relevance to package purpose
-- Validate formats (banner: 1200×630 horizontal)
+- Validate formats (diagram, video, slides)
 - Reject generic/wrong-format assets and retry
 
 **Duration**: 5-10 minutes (depending on selected assets)
@@ -2007,227 +2051,6 @@ graph TB
 
 ---
 
-## Asset Generation Tool Matrix
-
-**Which tool to use for each asset type**:
-
-| Asset Type | Primary Tool | Alternative Tools | When to Use Alternative |
-|------------|--------------|------------------|------------------------|
-| **Banner** | OpenRouter (DALL-E 3) | Canva, Figma, Adobe Express | Custom branding, precise text control |
-| **Architecture diagram** | NotebookLM | Mermaid, Canva, Figma | Need precise control, non-AI preference |
-| **System flowchart** | Mermaid | NotebookLM, PlantUML, draw.io | Prefer code-as-diagram, non-AI preference |
-| **Workflow flowchart** | Mermaid | NotebookLM, PlantUML, draw.io | Prefer code-as-diagram, non-AI preference |
-| **Explainer video** | NotebookLM | Loom, OBS + edit, HeyGen | Screen recording, avatar presenter, custom narration |
-| **Slide deck** | NotebookLM | Canva, Google Slides, PowerPoint | Custom branding, interactive elements |
-| **Video player page** | Auto-generated HTML | Manual HTML/CSS | Custom styling, interactive features |
-
-**Tool capabilities by asset type**:
-
-| Tool | Banner | Diagrams | Flowcharts | Video | Slides | HTML Page |
-|------|--------|----------|------------|-------|--------|-----------|
-| **NotebookLM** | ✅ | ✅ Best | ✅ | ✅ Best | ✅ Best | ❌ |
-| **OpenRouter** | ✅ Best | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Mermaid** | ❌ | ✅ | ✅ Best | ❌ | ❌ | ❌ |
-| **Canva** | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
-| **Figma** | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
-| **Loom** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **OBS Studio** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **HeyGen** | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **draw.io** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **PlantUML** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
-| **VS Code** | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ Manual |
-
-**Legend**:
-- ✅ = Can generate this asset type
-- ✅ Best = Best-in-class for this asset type
-- ❌ = Cannot generate this asset type
-
-**Recommendations by asset type**:
-
-| Asset | Use This Tool | Why |
-|-------|--------------|-----|
-| **Banner** | OpenRouter (integrated) | AI-generated, matches package theme, auto-created |
-| **Architecture diagram** | NotebookLM (integrated) | Analyzes code, generates accurate overview |
-| **Flowcharts** | Mermaid (integrated) | Code-as-diagram, version controlled, GitHub-native |
-| **Explainer video** | NotebookLM (integrated) | AI-narrated, technical tone, from sources |
-| **Slide deck** | NotebookLM (integrated) | AI-generated, matches video content |
-| **Video player page** | Auto-generated (integrated) | Zero setup, GitHub Pages ready |
-
-**When to deviate from defaults**:
-
-| Situation | Use Alternative Tool |
-|----------|----------------------|
-| Need custom branding on banner | Canva/Figma |
-| Prefer manual diagram control | Mermaid (still integrated) |
-| Want avatar presenter | HeyGen/Synthesia |
-| Screen recording demo | Loom/OBS |
-| Interactive slide features | Canva/Google Slides |
-| Non-technical diagram style | Figma/draw.io |
-
-**Note**: The `/github-ready` skill automates NotebookLM, OpenRouter, and Mermaid generation. Alternative tools require manual work outside the automated workflow.
-
----
-
-## Alternative Video Generation Tools
-
-**When to use alternatives**: NotebookLM is the default, but other tools may better fit your use case.
-
-### Quick Comparison
-
-| Tool | Best For | Cost | Pros | Cons |
-|------|----------|------|------|------|
-| **NotebookLM** | Technical architecture walkthroughs | Free | AI-generated from sources, no editing needed | Limited control over style |
-| **Veed.io** | Screen recordings + editing | Freemium | Easy editing, auto-captions, templates | Watermark on free tier |
-| **HeyGen** | AI avatar videos | Paid | Professional avatar, lip-sync | Expensive, uncanny valley risk |
-| **Loom** | Quick screen recordings | Freemium | One-click recording, hosting included | Limited editing, time limits |
-| **OBS Studio** | Professional screen recording | Free | Full control, no watermarks | Steeper learning curve |
-| **Camtasia** | Polished tutorial videos | Paid | Professional editing, animations | Expensive ($300+) |
-
-### Manual Screen Recording (OBS Studio)
-
-**When**: You want full control over the video content and style.
-
-**Setup** (one-time):
-```bash
-# Install OBS Studio
-# Windows: https://obsproject.com/download
-# macOS: brew install --cask obs
-# Linux: sudo apt install obs-studio
-```
-
-**Recording workflow**:
-1. Open OBS Studio
-2. Add **Screen Capture** source (select your IDE/browser)
-3. Add **Microphone/Audio** input if narrating
-3. Set recording resolution: 1920x1080 or 1280x720
-3. Click **Start Recording**
-4. Demonstrate your package: show workflow, explain architecture
-5. Click **Stop Recording**
-6. Output: `~/Videos/OBS/{date-time}.mkv`
-
-**Post-processing** (optional):
-- Trim intro/outro with **LosslessCut** (fast, no re-encoding)
-- Convert to MP4: `ffmpeg -i input.mkv -c:v libx264 -c:a aac output.mp4`
-- Compress for web: `ffmpeg -i output.mp4 -vcodec libx264 -crf 28 output_small.mp4`
-
-### Loom (Quick Screen Recordings)
-
-**When**: Rapid recording without editing complexity.
-
-**Workflow**:
-1. Install Loom desktop app or browser extension
-2. Click **New Recording**
-3. Select screen + camera + microphone
-4. Record your workflow (3-5 minute limit on free tier)
-5. Loom uploads and provides shareable link
-6. Download MP4 from Loom for GitHub asset hosting
-
-**Note**: Loom hosts videos on their servers. For portfolio-ready packages, download and host in your GitHub repo.
-
-### AI Avatar Videos (HeyGen, Synthesia)
-
-**When**: Professional presentation with AI presenter.
-
-**Workflow**:
-1. Script your explainer (120-200 words recommended)
-2. Choose avatar and voice
-3. Upload script or use text-to-speech
-4. Generate video (takes 5-10 minutes)
-5. Download MP4 for GitHub asset hosting
-
-**Note**: These services are expensive ($30-100/month). Use only if professional appearance is critical for your portfolio.
-
----
-
-## Video Upload to GitHub
-
-**Objective**: Host explainer videos in your GitHub repository for portfolio display.
-
-**Two approaches**:
-1. **Automated upload** via `upload_github_videos.py` (Playwright browser automation)
-2. **Manual upload** via GitHub web interface (drag-and-drop)
-
-### Method 1: Automated Upload (Recommended)
-
-**Script**: `scripts/upload_github_videos.py`
-
-**Requirements**:
-```bash
-pip install playwright
-playwright install chromium
-```
-
-**Usage**:
-```bash
-cd P:/packages/github-ready
-python scripts/upload_github_videos.py
-```
-
-**What it does**:
-1. Opens GitHub README edit page in browser
-2. Saves session (first run requires manual login, then persists)
-3. Uploads videos from `assets/videos/` to GitHub user-images CDN
-4. Extracts CDN links from editor content
-5. Generates README update instructions
-
-**Features**:
-- Session persistence (login once, reuse for future uploads)
-- Works with both new (contenteditable) and old (CodeMirror) GitHub editors
-- Automatic retry with timeout handling
-- Handles multiple videos in one run
-
-**Video file naming** (expected by script):
-- `github-ready_explainer_video.mp4` → mapped to `explainer_video`
-- `github-ready_explainer_podcast.mp4` → mapped to `explainer_podcast`
-
-**For other packages**, edit the script's `video_files` dict:
-```python
-video_files = {
-    'my_package_explainer.mp4': 'explainer_video',
-    'my_package_demo.mp4': 'demo_video'
-}
-```
-
-### Method 2: Manual Upload (Fallback)
-
-**When**: Playwright unavailable, or browser automation fails.
-
-**Steps**:
-1. Navigate to `https://github.com/{username}/{repo}/edit/main/README.md`
-2. Locate the markdown editor (center of page)
-3. **Drag and drop** your video file directly into the editor
-4. GitHub uploads to user-images CDN and inserts the link automatically
-5. Copy the inserted URL (format: `https://user-images.githubusercontent.com/.../mp4`)
-6. Use the URL in your README video section
-
-**Manual README update**:
-```markdown
-## Explainer Video
-
-<video src="https://user-images.githubusercontent.com/.../...mp4" controls style="max-width: 730px; margin: 10px 0;">
-</video>
-```
-
-**GitHub Pages alternative** (for cleaner embedding):
-
-Instead of CDN links, use GitHub Pages:
-1. Enable GitHub Pages: Settings → Pages → Source: `docs/` folder
-2. Create `docs/video.html` (see README.md "Video Hosting Pattern" section)
-3. Link README to `https://{username}.github.io/{repo}/docs/video.html`
-
-**Which method to use?**
-
-| Situation | Use This Method |
-|----------|-----------------|
-| Multiple packages, frequent updates | Automated (upload_github_videos.py) |
-| One-off upload, quick fix | Manual (drag-and-drop) |
-| Want cleaner video player page | GitHub Pages (docs/video.html) |
-| Need browser playback support | GitHub Pages (docs/video.html) |
-
-**Note**: The `finalize_github_repo.py` script (PHASE 7) automatically enables GitHub Pages for your repository.
-
----
-
 ## PHASE 5: Portfolio Polish (Auto-invoked after creation)
 
 **Objective**: Transform package into portfolio-quality GitHub artifact.
@@ -2396,7 +2219,7 @@ python ../github-ready/scripts/finalize_github_repo.py my-package . --package-ty
 
 ---
 
-## PHASE 4.6: Quality Scanning (Optional, during validation)
+## PHASE 4.5: Quality Scanning (Optional, during validation)
 
 **Objective**: Automated security and dependency scanning during validation phase.
 
@@ -2452,64 +2275,8 @@ python scripts/scan_package_quality.py . --skip-badges --save-report
 
 ---
 
-## PHASE 8: Cleanup (Auto-invoked)
-
-**Objective**: Detect and remove obsolete files after refactoring/scaffolding.
-
-**When**: Automatically runs after PHASE 5 (Portfolio Polish) completes.
-
-**What this detects**:
-- **Backup files** (*.backup-*, *.old, *.bak) - Shows file size and removal command
-- **Orphaned test files** - Tests for modules that no longer exist
-- **Obsolete documentation** - Old CHANGELOGs, phase completion docs, verification docs
-- **Duplicate implementations** - Known refactoring patterns (e.g., skill_enforcement → skill_first_gate)
-
-**Output**: `CLEANUP_REPORT.md` with:
-- Categorized list of files to remove
-- Evidence for why each should be removed
-- Bulk removal commands ready to run
-- Commit message template
-
-**Usage**: Review report and manually remove files (recommended for first run).
-
----
-
-## PHASE 9: Git Ready (Auto-invoked)
-
-**Objective**: Initialize git repository and create initial commit.
-
-**When**: Automatically runs after PHASE 4 (Validate) completes.
-
-**What this does**:
-- Initialize git repository (if not already a git repo): `git init`
-- Add all files and create initial commit: `git commit -m "Initial commit: Package scaffold..."`
-- Set main branch: `git branch -M main`
-- Skips if `.git/` directory already exists
-
-**Manual steps** (user does when ready):
-- Add remote: `git remote add origin https://github.com/{{USERNAME}}/{{NAME}}.git`
-- Push to GitHub: `git push -u origin main`
-
----
-
-## PHASE 10: Recruiter Readiness Validation (Auto-invoked)
-
-**Objective**: Validate package is showcase-ready for recruiters before GitHub posting.
-
-**When**: Automatically runs after PHASE 5 (Portfolio Polish) completes.
-
-**Checks performed**:
-- TODO comments in pyproject.toml (suggests incomplete work)
-- Plan files in root (looks messy/unprofessional)
-- Missing CI/CD workflow (reduces perceived professionalism)
-- No tests directory (lack of quality evidence)
-- Version is 0.0.x or 0.1.x (suggests experimental/unstable)
-
-**Scoring**: 90-100 (Excellent), 70-89 (Good), 50-69 (Fair), <50 (Poor)
-
-**Auto-fixes available**: Remove TODOs, move plan files to docs/planning/, create CI/CD workflow, bump version to 0.5.0 or 1.0.0.
-
-**Output**: `RECRUITER_READINESS_REPORT.md` with score, issues found, and one-command fixes.
+## PHASE 8: Cleanup (Auto-invoked)**Objective**: Detect and remove obsolete files after refactoring/scaffolding.**When**: Automatically runs after PHASE 5 (Portfolio Polish) completes.**What this detects**:- **Backup files** (*.backup-*, *.old, *.bak) - Shows file size and removal command- **Orphaned test files** - Tests for modules that no longer exist- **Obsolete documentation** - Old CHANGELOGs, phase completion docs, verification docs- **Duplicate implementations** - Known refactoring patterns (e.g., skill_enforcement → skill_first_gate)**Output**: `CLEANUP_REPORT.md` with:- Categorized list of files to remove- Evidence for why each should be removed- Bulk removal commands ready to run- Commit message template**Usage**: Review report and manually remove files (recommended for first run).
+## PHASE 9: Git Ready (Auto-invoked)**Objective**: Initialize git repository and create initial commit.**When**: Automatically runs after PHASE 4 (Validate) completes.**What this does**:- Initialize git repository (if not already a git repo): `git init`- Add all files and create initial commit: `git commit -m "Initial commit: Package scaffold..."`- Set main branch: `git branch -M main`- Skips if `.git/` directory already exists**Manual steps** (user does when ready):- Add remote: `git remote add origin https://github.com/{{USERNAME}}/{{NAME}}.git`- Push to GitHub: `git push -u origin main`## PHASE 10: Recruiter Readiness Validation (Auto-invoked)**Objective**: Validate package is showcase-ready for recruiters before GitHub posting.**When**: Automatically runs after PHASE 5 (Portfolio Polish) completes.**Checks performed**:- TODO comments in pyproject.toml (suggests incomplete work)- Plan files in root (looks messy/unprofessional)- Missing CI/CD workflow (reduces perceived professionalism)- No tests directory (lack of quality evidence)- Version is 0.0.x or 0.1.x (suggests experimental/unstable)**Scoring**: 90-100 (Excellent), 70-89 (Good), 50-69 (Fair), <50 (Poor)**Auto-fixes available**: Remove TODOs, move plan files to docs/planning/, create CI/CD workflow, bump version to 0.5.0 or 1.0.0.**Output**: `RECRUITER_READINESS_REPORT.md` with score, issues found, and one-command fixes.
 
 ## Integration
 

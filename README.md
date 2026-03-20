@@ -1,11 +1,11 @@
 # github-ready
 
-[![Version](https://img.shields.io/badge/version-5.14.0-blue.svg)](https://github.com/EndUser123/github-ready)
+[![Version](https://img.shields.io/badge/version-5.15.2-blue.svg)](https://github.com/EndUser123/github-ready)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-purple.svg)](https://github.com/EndUser123/github-ready)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/EndUser123/github-ready/actions)
 
-> Universal Package Creator and Portfolio Polisher v5.14.0
+> Universal Package Creator and Portfolio Polisher v5.15.2
 
 Create GitHub-ready Python libraries, Claude skills, and Claude Code plugins with badges, CI/CD workflows, coverage metrics, media artifacts, and automated GitHub publication.
 
@@ -32,48 +32,6 @@ Create GitHub-ready Python libraries, Claude skills, and Claude Code plugins wit
 
 **Quick overview**: Features, workflow, and automated portfolio polish.
 *Runtime should match the exported NotebookLM asset; update this text only after verifying the final file duration.*
-
-## Video Hosting Pattern
-
-To add video playback to your repository:
-
-```
-your-repo/
-├── assets/
-│   └── videos/
-│       └── your_video.mp4
-├── docs/
-│   └── video.html
-└── README.md
-```
-
-**1. Create `docs/video.html`:**
-```html
-<!doctype html>
-<html>
-<head>
-  <title>Your Package - Video</title>
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; background: #0d1117; color: #c9d1d9; }
-    video { display: block; width: 100%; border-radius: 8px; }
-  </style>
-</head>
-<body>
-  <h1>Explainer Video</h1>
-  <video controls preload="metadata" poster="../assets/videos/thumbnail.png">
-    <source src="../assets/videos/your_video.mp4" type="video/mp4">
-  </video>
-  <p><a href="../assets/videos/your_video.mp4" download>⬇️ Download MP4</a></p>
-</body>
-</html>
-```
-
-**2. Enable GitHub Pages:** Settings → Pages → Source: `docs/` folder
-
-**3. Link from README:**
-```markdown
-[![Watch video](assets/videos/thumbnail.png)](https://username.github.io/repo/docs/video.html)
-```
 
 ## What github-ready Does
 
@@ -278,6 +236,8 @@ Quality scan report with:
 - Broken or missing badge references
 - Code quality metrics (file counts, test ratio, LOC)
 - Overall assessment and recommendations
+
+## Development and Deployment
 
 ## Development and Deployment
 

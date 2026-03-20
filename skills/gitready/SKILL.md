@@ -279,8 +279,26 @@ elif [ -d "{{TARGET_DIR}}/src" ] || [ -f "{{TARGET_DIR}}/pyproject.toml" ]; then
     PACKAGE_TYPE="python-library"
     echo "Detected: Python Library"
 
+    # MCP SERVER DETECTION: Check for MCP server patterns in src/
+    HAS_MCP_IN_SRC=$(find "{{TARGET_DIR}}/src" -path "*/mcp/server.py" -o -path "*/mcp/__init__.py" 2>/dev/null | head -1)
+    if [ -n "$HAS_MCP_IN_SRC" ]; then
+        echo ""
+        echo "⚠️  MCP SERVER DETECTED in Python library: $HAS_MCP_IN_SRC"
+        echo ""
+        echo "RECOMMENDATION: Convert to claude-plugin+mcp structure"
+        echo "  • MCP servers should use plugin structure with .mcp.json"
+        echo "  • Enables /plugin command installation"
+        echo "  • Structure: .claude-plugin/ + core/ + .mcp.json"
+        echo ""
+        read -p "Convert to claude-plugin+mcp? (y/n): " CONVERT_TO_MCP_PLUGIN
+        if [ "$CONVERT_TO_MCP_PLUGIN" = "y" ]; then
+            PACKAGE_TYPE="brownfield-plugin+mcp"
+            echo "✓ Proceeding with MCP plugin conversion..."
+        fi
+    fi
+
     # BROWNFIELD DETECTION: Check if Python library can be converted to plugin
-    if [ -d "{{TARGET_DIR}}/src" ] && [ -f "{{TARGET_DIR}}/pyproject.toml" ]; then
+    if [ -d "{{TARGET_DIR}}/src" ] && [ -f "{{TARGET_DIR}}/pyproject.toml" ] && [ "$PACKAGE_TYPE" = "python-library" ]; then
         echo ""
         echo "⚠️  Python library detected: src/{{NAME}}/ with pyproject.toml"
         echo "Convert to Claude Code plugin?"
@@ -319,7 +337,7 @@ fi
 
 ---
 
-## PHASE 1.6: Brownfield Conversion (2min) — ONLY IF `PACKAGE_TYPE=brownfield-plugin`⚠️ **CRITICAL**: Review `references/brownfield-conversion.md` FIRST before proceeding.
+## PHASE 1.6: Brownfield Conversion (2min) — ONLY IF `PACKAGE_TYPE=brownfield-plugin` OR `brownfield-plugin+mcp`⚠️ **CRITICAL**: Review `references/brownfield-conversion.md` FIRST before proceeding.
 
 **Pre-Conversion Checklist** (5 items):
 - [ ] Fix hardcoded paths (no `P:/`, `/Users/`, `C:/` in source code)
@@ -348,6 +366,46 @@ cmd /c "mklink SessionStart_handoff_restore.py p:\packages\handoff\core\hooks\Se
 ```
 
 **Common pitfall**: Symlinks in `P:/.claude/hooks/` may still point to old `src/handoff/hooks/` path after conversion. Must point to `core/hooks/`.
+
+### MCP Server Configuration — ONLY IF `PACKAGE_TYPE=brownfield-plugin+mcp`
+
+After brownfield conversion for MCP server packages, create `.mcp.json`:
+
+**Steps:**
+
+1. **Identify MCP server entry point**:
+```bash
+# Find the MCP server module (usually in core/mcp/server.py or core/mcp/)
+find core -name "server.py" -path "*/mcp/*" | head -1
+```
+
+2. **Create `.mcp.json`**:
+```json
+{
+  "{{package_name}}": {
+    "command": "python",
+    "args": ["-m", "core.mcp.server"]
+  }
+}
+```
+
+3. **Verify MCP server works**:
+```bash
+python -m core.mcp.server --help  # Or check it starts without errors
+```
+
+**Important**: Use `CLAUDE_PLUGIN_ROOT` for portable paths if the MCP server needs file access:
+```json
+{
+  "{{package_name}}": {
+    "command": "python",
+    "args": ["-m", "core.mcp.server"],
+    "env": {
+      "CONFIG_DIR": "CLAUDE_PLUGIN_ROOT/config"
+    }
+  }
+}
+```
 
 ## PHASE 1.7: Plugin Standards Validation (Auto-invoked)
 

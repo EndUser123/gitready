@@ -1,1 +1,1 @@
-"""Tests for github-ready package."""
+"""Tests for gitready package."""

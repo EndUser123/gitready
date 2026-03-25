@@ -1,6 +1,6 @@
-# Contributing to github-ready
+# Contributing to gitready
 
-Thank you for your interest in contributing to github-ready! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to gitready! This document provides guidelines and instructions for contributing.
 
 ## Development Setup
 
@@ -14,23 +14,23 @@ Thank you for your interest in contributing to github-ready! This document provi
 
 1. **Fork and clone the repository**
    ```bash
-   git clone https://github.com/yourusername/github-ready.git
-   cd github-ready
+   git clone https://github.com/yourusername/gitready.git
+   cd gitready
    ```
 
 2. **Create a junction for local development**
    ```powershell
    # Windows (no admin required)
-   New-Item -ItemType Junction -Path "P:\.claude\skills\github-ready" -Target "P:\packages\github-ready"
+   New-Item -ItemType Junction -Path "P:\.claude\skills\gitready" -Target "P:\packages\gitready"
    ```
 
 3. **Make your changes**
-   - Edit files in `P:/packages/github-ready`
+   - Edit files in `P:/packages/gitready`
    - Changes are immediately available via the junction
 
 4. **Run tests**
    ```bash
-   cd P:/packages/github-ready
+   cd P:/packages/gitready
    pytest tests/ -v
    ```
 

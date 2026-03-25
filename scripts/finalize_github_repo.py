@@ -95,7 +95,7 @@ def get_github_username() -> str:
 def get_package_topics(package_type: str) -> list[str]:
     """Get relevant topics based on package type."""
     # Base topics for all packages
-    base_topics = ["python", "github-ready"]
+    base_topics = ["python", "gitready"]
 
     # Type-specific topics
     type_topics = {

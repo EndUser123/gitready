@@ -1,5 +1,5 @@
 """
-Version Synchronization Script for github-ready
+Version Synchronization Script for gitready
 
 Ensures version consistency across all project artifacts by treating
 core/__init__.py as the single source of truth.
@@ -13,7 +13,7 @@ What it does:
     3. Updates README.md (all version references)
     4. Validates all changes were applied
 
-Author: github-ready automation script
+Author: gitready automation script
 """
 
 import json
@@ -206,7 +206,7 @@ def main() -> int:
         Exit code (0 = success, 1 = error)
     """
     try:
-        print("=== github-ready Version Sync ===\n")
+        print("=== gitready Version Sync ===\n")
 
         # Step 1: Get source version
         print("📖 Reading version from core/__init__.py...")

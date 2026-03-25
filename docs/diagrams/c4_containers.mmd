@@ -1,13 +1,13 @@
 %%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1f6feb', 'primaryTextColor': '#c9d1d9', 'primaryBorderColor': '#58a6ff', 'lineColor': '#58a6ff', 'secondaryColor': '#21262d', 'tertiaryColor': '#161b22'}}}%%
-%% C4 Container Diagram for github-ready
+%% C4 Container Diagram for gitready
 %% Shows the main applications and data stores
 
 C4Container
-    title Container Diagram - github-ready Architecture
+    title Container Diagram - gitready Architecture
 
     Person(user, "Package Developer", "Creates packages")
 
-    Container(cli, "CLI Interface", "Claude Code", "/github-ready command", "Skill invocation")
+    Container(cli, "CLI Interface", "Claude Code", "/gitready command", "Skill invocation")
 
     Container(skill, "Package Skill", "Python", "Main package creation logic", "Core processing")
 

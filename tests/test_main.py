@@ -1,4 +1,4 @@
-"""Test github-ready main module."""
+"""Test gitready main module."""
 
 
 from core import __version__

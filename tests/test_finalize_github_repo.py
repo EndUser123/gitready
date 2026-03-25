@@ -121,7 +121,7 @@ class TestGetPackageTopics:
         """Test topics for plugin type."""
         topics = finalize_github_repo.get_package_topics("plugin")
         assert "python" in topics
-        assert "github-ready" in topics
+        assert "gitready" in topics
         assert "claude-code" in topics
         assert "plugin" in topics
 

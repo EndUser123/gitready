@@ -4,7 +4,7 @@ This directory should contain videos downloaded from NotebookLM.
 
 ## Instructions
 
-1. Open your NotebookLM notebook for `github-ready`
+1. Open your NotebookLM notebook for `gitready`
 2. Generate Video Overviews in Studio
 3. Set notebook sharing to "Anyone with the link"
 4. Click Share on the video and copy the link
@@ -16,7 +16,7 @@ This directory should contain videos downloaded from NotebookLM.
 ## Usage in README.md
 
 ```markdown
-[![Watch the video](assets/infographics/github-ready_architecture.png)](https://notebooklm.google.com/video/YOUR_VIDEO_ID "Full video overview")
+[![Watch the video](assets/infographics/gitready_architecture.png)](https://notebooklm.google.com/video/YOUR_VIDEO_ID "Full video overview")
 
 **📺 Video Overview** | **⬇️ Download MP4**
 ```

@@ -404,7 +404,10 @@ class TestMain:
                     scan_package_quality.main()
                 assert exc_info.value.code == 1
 
-    @patch("sys.argv", ["scan_package_quality.py", "/nonexistent"])
+    @patch(
+        "sys.argv",
+        ["scan_package_quality.py", "X:/this_directory_does_not_exist_12345"],
+    )
     def test_main_invalid_directory(self):
         """Test main with invalid directory."""
         with pytest.raises(SystemExit) as exc_info:

@@ -1,4 +1,4 @@
-# AGENTS.md - github-ready Plugin
+# AGENTS.md - gitready Plugin
 
 **For AI coding assistants (Claude, Copilot, etc.) working on this codebase.**
 
@@ -6,7 +6,7 @@
 
 ## Role & Persona
 
-You are a senior software architect specializing in the **Claude Code Plugin ecosystem**. Your goal is to help maintain and extend the `github-ready` plugin while adhering to its strict **"Skill-Based Logic" philosophy**.
+You are a senior software architect specializing in the **Claude Code Plugin ecosystem**. Your goal is to help maintain and extend the `gitready` plugin while adhering to its strict **"Skill-Based Logic" philosophy**.
 
 ---
 
@@ -43,7 +43,7 @@ You are a senior software architect specializing in the **Claude Code Plugin eco
 
 **Wrong:**
 ```python
-path = "P:/packages/github-ready/core/main.py"  # Hardcoded path
+path = "P:/packages/gitready/core/main.py"  # Hardcoded path
 ```
 
 **Right:**
@@ -93,7 +93,7 @@ python core/sync.py
 claude --plugin-dir .
 
 # Or with plugin command
-/plugin P:/packages/github-ready
+/plugin P:/packages/gitready
 ```
 
 ---
@@ -189,7 +189,7 @@ Before finishing ANY task, you MUST:
 ### Component Structure
 
 ```
-github-ready/
+gitready/
 ├── .claude-plugin/          # Plugin metadata
 │   └── plugin.json          # Name, description, author
 ├── core/                    # Python code (NOT src/)
@@ -376,7 +376,7 @@ python -m json.tool .claude-plugin/plugin.json
 **Example .mcp.json:**
 ```json
 {
-  "github-ready": {
+  "gitready": {
     "command": "python",
     "args": ["-m", "core.mcp.server"]
   }

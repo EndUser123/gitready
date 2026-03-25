@@ -1,7 +1,7 @@
 ---
 name: gitready
-version: 5.13.0
-description: This skill should be used when the user asks to "create a package", "scaffold a Python library", "make a GitHub-ready repo", "generate badges", "set up CI/CD", "convert to plugin", "brownfield conversion", "validate plugin standards", or mentions package scaffolding, portfolio polish, repository structure setup, badge generation, or plugin standards validation. Creates GitHub-ready Python libraries, Claude skills, and Claude Code plugins with badges, CI/CD workflows, coverage metrics, media artifacts, and automatic plugin standards validation. Now includes PHASE 6: GitHub Publication and PHASE 7: Repository Finalization.
+version: 5.14.0
+description: This skill should be used when the user asks to "create a package", "scaffold a Python library", "make a GitHub-ready repo", "generate badges", "set up CI/CD", "convert to plugin", "brownfield conversion", "validate plugin standards", or mentions package scaffolding, portfolio polish, repository structure setup, badge generation, or plugin standards validation. Creates GitHub-ready Python libraries, Claude skills, and Claude Code plugins with badges, CI/CD workflows, coverage metrics, media artifacts, interactive course modules, and automatic plugin standards validation. Now includes PHASE 6: GitHub Publication and PHASE 7: Repository Finalization.
 category: scaffolding
 triggers:
   - /gitready
@@ -24,7 +24,7 @@ workflow_steps:
 suggest:
   - /init
 ---
-# /gitready — Universal Package Creator & Portfolio Polisher v5.13.0
+# /gitready — Universal Package Creator & Portfolio Polisher v5.14.0
 
 ## Purpose
 
@@ -279,26 +279,8 @@ elif [ -d "{{TARGET_DIR}}/src" ] || [ -f "{{TARGET_DIR}}/pyproject.toml" ]; then
     PACKAGE_TYPE="python-library"
     echo "Detected: Python Library"
 
-    # MCP SERVER DETECTION: Check for MCP server patterns in src/
-    HAS_MCP_IN_SRC=$(find "{{TARGET_DIR}}/src" -path "*/mcp/server.py" -o -path "*/mcp/__init__.py" 2>/dev/null | head -1)
-    if [ -n "$HAS_MCP_IN_SRC" ]; then
-        echo ""
-        echo "⚠️  MCP SERVER DETECTED in Python library: $HAS_MCP_IN_SRC"
-        echo ""
-        echo "RECOMMENDATION: Convert to claude-plugin+mcp structure"
-        echo "  • MCP servers should use plugin structure with .mcp.json"
-        echo "  • Enables /plugin command installation"
-        echo "  • Structure: .claude-plugin/ + core/ + .mcp.json"
-        echo ""
-        read -p "Convert to claude-plugin+mcp? (y/n): " CONVERT_TO_MCP_PLUGIN
-        if [ "$CONVERT_TO_MCP_PLUGIN" = "y" ]; then
-            PACKAGE_TYPE="brownfield-plugin+mcp"
-            echo "✓ Proceeding with MCP plugin conversion..."
-        fi
-    fi
-
     # BROWNFIELD DETECTION: Check if Python library can be converted to plugin
-    if [ -d "{{TARGET_DIR}}/src" ] && [ -f "{{TARGET_DIR}}/pyproject.toml" ] && [ "$PACKAGE_TYPE" = "python-library" ]; then
+    if [ -d "{{TARGET_DIR}}/src" ] && [ -f "{{TARGET_DIR}}/pyproject.toml" ]; then
         echo ""
         echo "⚠️  Python library detected: src/{{NAME}}/ with pyproject.toml"
         echo "Convert to Claude Code plugin?"
@@ -337,7 +319,7 @@ fi
 
 ---
 
-## PHASE 1.6: Brownfield Conversion (2min) — ONLY IF `PACKAGE_TYPE=brownfield-plugin` OR `brownfield-plugin+mcp`⚠️ **CRITICAL**: Review `references/brownfield-conversion.md` FIRST before proceeding.
+## PHASE 1.6: Brownfield Conversion (2min) — ONLY IF `PACKAGE_TYPE=brownfield-plugin`⚠️ **CRITICAL**: Review `references/brownfield-conversion.md` FIRST before proceeding.
 
 **Pre-Conversion Checklist** (5 items):
 - [ ] Fix hardcoded paths (no `P:/`, `/Users/`, `C:/` in source code)
@@ -366,46 +348,6 @@ cmd /c "mklink SessionStart_handoff_restore.py p:\packages\handoff\core\hooks\Se
 ```
 
 **Common pitfall**: Symlinks in `P:/.claude/hooks/` may still point to old `src/handoff/hooks/` path after conversion. Must point to `core/hooks/`.
-
-### MCP Server Configuration — ONLY IF `PACKAGE_TYPE=brownfield-plugin+mcp`
-
-After brownfield conversion for MCP server packages, create `.mcp.json`:
-
-**Steps:**
-
-1. **Identify MCP server entry point**:
-```bash
-# Find the MCP server module (usually in core/mcp/server.py or core/mcp/)
-find core -name "server.py" -path "*/mcp/*" | head -1
-```
-
-2. **Create `.mcp.json`**:
-```json
-{
-  "{{package_name}}": {
-    "command": "python",
-    "args": ["-m", "core.mcp.server"]
-  }
-}
-```
-
-3. **Verify MCP server works**:
-```bash
-python -m core.mcp.server --help  # Or check it starts without errors
-```
-
-**Important**: Use `CLAUDE_PLUGIN_ROOT` for portable paths if the MCP server needs file access:
-```json
-{
-  "{{package_name}}": {
-    "command": "python",
-    "args": ["-m", "core.mcp.server"],
-    "env": {
-      "CONFIG_DIR": "CLAUDE_PLUGIN_ROOT/config"
-    }
-  }
-}
-```
 
 ## PHASE 1.7: Plugin Standards Validation (Auto-invoked)
 
@@ -965,18 +907,25 @@ touch {{TARGET_DIR}}/tests/__init__.py
 **Required top-level README order:**
 1. Project title, badges, and one-paragraph overview
 2. `Quick Start`
-3. `Explainer Video`
-4. `What {{package_name}} Does`
-5. `Development and Deployment`
-6. `Additional Media Assets`
-7. Lower-priority reference sections such as package types, contributing, changelog, and resources
+3. `See The Transformation` (before/after comparison table)
+4. `Explainer Video`
+5. `What {{package_name}} Does` (capabilities + pipeline overview)
+6. `What Gets Created` (artifact tree — the outcome)
+7. `Which Package Type Do You Need?` (decision helper, placed near artifacts)
+8. `Development and Deployment`
+9. `Additional Media Assets`
+10. `Contributing`, `Changelog`, `License`, `Resources`
+11. PHASE deep-dives (`PHASE 4.5`, `PHASE 6`, `PHASE 7`) — reference material at the end
 
 **Rules:**
 - Put the explainer video immediately after `Quick Start`
+- Keep `What Gets Created` before `Which Package Type` so users see the outcome first, then learn which type they need
+- Move PHASE sections to the end — they are reference material, not part of the primary user journey
 - Keep architecture, workflow, and usage details on the main GitHub page
 - Generate `docs/video.html` for GitHub Pages by default
 - Do not generate extra Pages docs such as `docs/*architecture*.html` or `docs/*workflow*.html` unless the user explicitly asks for them
 - Link the README poster image to the GitHub Pages player page and keep all other technical content in the repository README
+- **Also generate `docs/README-preview.html`** — a styled HTML version of the README for local preview with GitHub-like CSS (light/dark theme support)
 
 ### README Template for Claude Code Plugins
 
@@ -1121,6 +1070,12 @@ graph TB
 
 *Use the PDF for both viewing and download on GitHub.*
 
+### Interactive Course
+
+[**Learn how {{package_name}} works →**](https://{{github_username}}.github.io/{{package_name}}/docs/{{package_name}}_course.html)
+
+*An interactive walkthrough of the architecture, components, and how everything fits together.*
+
 ---
 
 **💡 Tip**: Use GitHub Pages for in-browser video playback. Keep the slide deck in PDF form for the cleanest GitHub viewing experience.
@@ -1144,6 +1099,168 @@ ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:no
 ```
 
 **For brownfield conversions**: See \`references/brownfield-conversion.md\` for README update instructions (migration notice, rollback instructions, updated usage examples).
+
+### HTML Preview Generation
+
+**After generating README.md, also create an HTML preview file for local viewing:**
+
+```bash
+# Create docs directory if it doesn't exist
+mkdir -p docs
+
+# Generate HTML preview with GitHub-style CSS and day-night toggle
+cat > docs/README-preview.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{package_name}} - README Preview</title>
+    <style>
+        /* === LIGHT THEME === */
+        :root, [data-theme="light"] {
+            --bg-color: #ffffff;
+            --bg-code: #f6f8fa;
+            --text-color: #24292e;
+            --text-muted: #586069;
+            --link-color: #0366d6;
+            --border-color: #e1e4e8;
+            --heading-color: #111;
+            --inline-code-bg: #eff1f3;
+            --blockquote-border: #dfe2e5;
+            --blockquote-bg: #f6f8fa;
+            --toggle-bg: #e1e4e8;
+            --toggle-fg: #586069;
+            --header-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        /* === DARK THEME === */
+        [data-theme="dark"] {
+            --bg-color: #0d1117;
+            --bg-code: #161b22;
+            --text-color: #c9d1d9;
+            --text-muted: #8b949e;
+            --link-color: #58a6ff;
+            --border-color: #30363d;
+            --heading-color: #f0f6fc;
+            --inline-code-bg: #2d333b;
+            --blockquote-border: #3b434b;
+            --blockquote-bg: #161b22;
+            --toggle-bg: #30363d;
+            --toggle-fg: #c9d1d9;
+            --header-gradient: linear-gradient(135deg, #4a3f78 0%, #5a4a6a 100%);
+        }
+        /* === BASE STYLES === */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        /* === THEME TOGGLE === */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: var(--toggle-bg);
+            color: var(--toggle-fg);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+        .theme-toggle:hover {
+            border-color: var(--link-color);
+            color: var(--link-color);
+        }
+        .theme-toggle:focus {
+            outline: 2px solid var(--link-color);
+            outline-offset: 2px;
+        }
+        /* === TYPOGRAPHY === */
+        a { color: var(--link-color); }
+        h1, h2, h3, h4, h5, h6 { color: var(--heading-color); margin-top: 24px; margin-bottom: 16px; font-weight: 600; }
+        h1 { font-size: 2em; border-bottom: 1px solid var(--border-color); padding-bottom: 0.3em; }
+        h2 { font-size: 1.5em; border-bottom: 1px solid var(--border-color); padding-bottom: 0.3em; }
+        h3 { font-size: 1.25em; }
+        p { margin-bottom: 16px; }
+        /* === CODE === */
+        code { background: var(--inline-code-bg); padding: 0.2em 0.4em; border-radius: 3px; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 85%; }
+        pre { background: var(--bg-code); padding: 16px; border-radius: 6px; overflow-x: auto; }
+        pre code { background: transparent; padding: 0; }
+        /* === QUOTES & TABLES === */
+        blockquote { border-left: 4px solid var(--blockquote-border); padding: 0 16px; margin: 0; color: var(--text-muted); background: var(--blockquote-bg); }
+        table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+        th, td { border: 1px solid var(--border-color); padding: 8px 13px; }
+        th { background: var(--bg-code); }
+        /* === MEDIA & MISC === */
+        img { max-width: 100%; }
+        hr { border: none; border-top: 1px solid var(--border-color); margin: 24px 0; }
+        details { margin: 16px 0; }
+        summary { cursor: pointer; font-weight: 500; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 12px; vertical-align: middle; }
+        /* === HEADER SECTION === */
+        .header-section { background: var(--header-gradient); color: white; padding: 2em; border-radius: 8px; margin-bottom: 2em; transition: background 0.2s ease; }
+        .header-section h1 { color: white; border: none; }
+        .header-section p { color: rgba(255,255,255,0.9); }
+        /* === CODE HILITE (for pre-existing content) === */
+        .codehilite { background: var(--bg-code); padding: 16px; border-radius: 6px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle theme">
+    <span id="theme-icon">&#9788;</span>
+</button>
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const icon = document.getElementById('theme-icon');
+        const current = html.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        icon.innerHTML = next === 'dark' ? '&#9790;' : '&#9788;';
+        localStorage.setItem('theme', next);
+    }
+    // Init from localStorage or system preference
+    (function() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            document.documentElement.setAttribute('data-theme', saved);
+            document.getElementById('theme-icon').innerHTML = saved === 'dark' ? '&#9790;' : '&#9788;';
+        }
+    })();
+</script>
+<!-- README CONTENT WILL BE INSERTED HERE BY THE SKILL -->
+</body>
+</html>
+HTMLEOF
+```
+
+**HTML preview features:**
+- **Day-night toggle** — clickable sun/moon button (top-right), persists preference in localStorage
+- GitHub-inspired light/dark theme with CSS variables
+- All elements (code, tables, blockquotes, badges, header) respond to theme change
+- Responsive layout (max-width 900px)
+- Syntax highlighting for code blocks
+- Proper styling for tables, blockquotes, badges
+- Collapsible `<details>` sections render correctly
+
+**Output file:** `docs/README-preview.html`
+
+**Update after PHASE 4.8:** The course is now a separate HTML file (`docs/{package}_course.html`) linked from README. The README-preview.html focuses on rendering the README content itself.
+
+**Note:** The HTML preview is for local development viewing. The canonical documentation remains `README.md` which GitHub renders automatically.
+
 ## PHASE 4: Validate (1min)
 
 **Objective**: Verify package structure is correct.
@@ -2109,6 +2226,58 @@ graph TB
 
 ---
 
+## PHASE 4.8: Interactive Course (Auto-invoked)
+
+**Objective**: Generate a self-contained HTML course that teaches how the package works using the codebase-to-course skill.
+
+**When**: Automatically runs after PHASE 4.7 (Media Generation) completes, before PHASE 5 (Portfolio Polish).
+
+**What this does:**
+- Invokes the codebase-to-course skill to analyze package source code
+- Generates a standalone HTML file with scroll-based navigation, animations, quizzes, and code↔English translations
+- Outputs to `docs/{package}_course.html` for GitHub Pages hosting
+
+**Why use codebase-to-course:**
+- Produces a premium interactive learning experience (not markdown)
+- Self-contained HTML with only Google Fonts dependency
+- Visual-first design: tooltips, animations, quizzes, metaphors
+- Portfolio visitors get a "Nerdificient" branded experience that differentiates from commodity packages
+
+**Execution:**
+```
+/codebase-to-course {{TARGET_DIR}}
+```
+
+**Output:**
+- `docs/{package}_course.html` — standalone HTML course
+- Link in README "Additional Media Assets" section pointing to GitHub Pages URL
+
+**README integration:**
+After generating the course HTML, add to README "Additional Media Assets" section:
+
+```markdown
+### Interactive Course
+
+[**Learn how {{package_name}} works →**](https://{{github_username}}.github.io/{{package_name}}/docs/{{package_name}}_course.html)
+
+*An interactive walkthrough of the architecture, components, and how everything fits together.*
+```
+
+**Auto-skip conditions:**
+- User explicitly opts out with `--skip course`
+- Package has no source code (e.g., pure documentation package)
+- codebase-to-course skill is not installed
+
+**GitHub Pages requirement:**
+The course requires GitHub Pages to be enabled for in-browser viewing. If Pages is not enabled, the README link will still work as a direct file link to `docs/{package}_course.html` in the repository.
+
+**Duration**: 3-5 minutes (codebase analysis + HTML generation)
+
+**HTML Preview Update**:
+The HTML preview (`docs/README-preview.html`) does not include the course — it focuses on README rendering. The course HTML is a separate file linked from README.
+
+---
+
 ## PHASE 5: Portfolio Polish (Auto-invoked after creation)
 
 **Objective**: Transform package into portfolio-quality GitHub artifact.
@@ -2203,28 +2372,6 @@ jobs:
 **Prerequisites**:
 - GitHub CLI (`gh`) installed and authenticated
 - Valid GitHub token with repo creation permissions
-
-**Authentication Methods** (use ONE):
-
-1. **GitHub CLI** (recommended):
-   ```bash
-   gh auth login  # Interactive browser or token flow
-   gh auth status # Verify authentication
-   ```
-
-2. **Token-based** (if `gh` not authenticated):
-   - Set `GITHUB_TOKEN` environment variable with a Personal Access Token
-   - Token needs `repo` scope for creating repositories
-   - Use GitHub API directly:
-     ```bash
-     curl -H "Authorization: token $GITHUB_TOKEN" \
-       https://api.github.com/user/repos \
-       -d '{"name":"my-package","public":true}'
-     ```
-
-3. **Manual fallback** (if no token available):
-   - Create repository at https://github.com/new
-   - Add remote and push: `git remote add origin https://github.com/USER/REPO.git && git push -u origin main`
 
 **Usage**:
 ```bash
@@ -2450,6 +2597,13 @@ checklist=(
 ```
 
 ## Changelog
+
+### v5.14.0 (2026-03-24)
+- ✅ **INTERACTIVE COURSE (PHASE 4.8)**: Invokes codebase-to-course skill to generate standalone HTML course
+- ✅ **SELF-CONTAINED HTML**: Course output to `docs/{package}_course.html` with scroll navigation, animations, quizzes
+- ✅ **CODE↔ENGLISH TRANSLATIONS**: Side-by-side code explanations for non-technical learners
+- ✅ **GITHUB PAGES INTEGRATION**: Course linked from README "Additional Media Assets" section
+- ✅ **VISUAL-FIRST DESIGN**: Tooltips, metaphors, "aha!" callouts, interactive quizzes
 
 ### v5.6.0 (2026-03-14)
 - ✅ **PLUGIN STANDARDS VALIDATION**: Added PHASE 1.7 - automatic validation of plugin files/folders against Claude Code plugin standards

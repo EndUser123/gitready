@@ -58,7 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `extract_from_monorepo.py` - Monorepo extraction with history preservation
   - `create_github_repo.py` - GitHub repo creation with manual fallback
 - `package_validations.json` - Target-specific validation rules for search-research, skill-guard, loop-core, and generic packages
-- Junction setup at `.claude/skills/github-ready/` for automatic skill file syncing
+- Junction setup at `.claude/skills/gitready/` for automatic skill file syncing
 
 ### Changed
 - Renumbered PHASE 6 (Cleanup) → PHASE 7
@@ -129,13 +129,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 See previous skill documentation for historical changes.
 
-[5.15.2]: https://github.com/EndUser123/github-ready/compare/v5.15.1...v5.15.2
-[5.15.1]: https://github.com/EndUser123/github-ready/compare/v5.15.0...v5.15.1
-[5.15.0]: https://github.com/EndUser123/github-ready/compare/v5.14.0...v5.15.0
-[5.14.0]: https://github.com/EndUser123/github-ready/compare/v5.12.0...v5.14.0
-[5.12.0]: https://github.com/EndUser123/github-ready/compare/v5.11.0...v5.12.0
-[5.11.0]: https://github.com/EndUser123/github-ready/compare/v5.5.3...v5.11.0
-[5.5.3]: https://github.com/EndUser123/github-ready/compare/v5.5.2...v5.5.3
-[5.5.2]: https://github.com/EndUser123/github-ready/compare/v5.5.1...v5.5.2
-[5.5.1]: https://github.com/EndUser123/github-ready/compare/v5.5.0...v5.5.1
-[5.5.0]: https://github.com/EndUser123/github-ready/compare/v5.4.0...v5.5.0
+[5.15.2]: https://github.com/EndUser123/gitready/compare/v5.15.1...v5.15.2
+[5.15.1]: https://github.com/EndUser123/gitready/compare/v5.15.0...v5.15.1
+[5.15.0]: https://github.com/EndUser123/gitready/compare/v5.14.0...v5.15.0
+[5.14.0]: https://github.com/EndUser123/gitready/compare/v5.12.0...v5.14.0
+[5.12.0]: https://github.com/EndUser123/gitready/compare/v5.11.0...v5.12.0
+[5.11.0]: https://github.com/EndUser123/gitready/compare/v5.5.3...v5.11.0
+[5.5.3]: https://github.com/EndUser123/gitready/compare/v5.5.2...v5.5.3
+[5.5.2]: https://github.com/EndUser123/gitready/compare/v5.5.1...v5.5.2
+[5.5.1]: https://github.com/EndUser123/gitready/compare/v5.5.0...v5.5.1
+[5.5.0]: https://github.com/EndUser123/gitready/compare/v5.4.0...v5.5.0

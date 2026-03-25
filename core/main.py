@@ -1,5 +1,5 @@
 """
-github-ready - Main module
+gitready - Main module
 
 Universal Package Creator & Portfolio Polisher
 """

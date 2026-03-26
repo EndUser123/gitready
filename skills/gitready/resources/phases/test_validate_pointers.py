@@ -6,7 +6,6 @@ from __future__ import annotations
 import tempfile
 from pathlib import Path
 
-
 from resources.phases.validate_pointers import validate_pointers
 
 
@@ -82,9 +81,7 @@ class TestValidatePointers:
             target2 = tmpdir / "file2.md"
             target1.write_text("Content 1\n", encoding="utf-8")
             target2.write_text("Content 2\n", encoding="utf-8")
-            skill_md.write_text(
-                "> READ: file1.md\n> READ: file2.md\n", encoding="utf-8"
-            )
+            skill_md.write_text("> READ: file1.md\n> READ: file2.md\n", encoding="utf-8")
 
             errors = validate_pointers(skill_md)
             assert errors == []
@@ -96,9 +93,7 @@ class TestValidatePointers:
             skill_md = tmpdir / "SKILL.md"
             target1 = tmpdir / "good.md"
             target1.write_text("Good content\n", encoding="utf-8")
-            skill_md.write_text(
-                "> READ: good.md\n> READ: missing.md\n", encoding="utf-8"
-            )
+            skill_md.write_text("> READ: good.md\n> READ: missing.md\n", encoding="utf-8")
 
             errors = validate_pointers(skill_md)
             assert len(errors) == 1

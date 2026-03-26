@@ -48,13 +48,9 @@ def validate_pointers(skill_md_path: str | Path | None = None) -> list[str]:
         resolved = skill_dir / pointer_path
 
         if not resolved.exists():
-            errors.append(
-                f"Line {line_no}: pointer points to non-existent file: {pointer_path}"
-            )
+            errors.append(f"Line {line_no}: pointer points to non-existent file: {pointer_path}")
         elif resolved.stat().st_size == 0:
-            errors.append(
-                f"Line {line_no}: pointer points to empty file (0 bytes): {pointer_path}"
-            )
+            errors.append(f"Line {line_no}: pointer points to empty file (0 bytes): {pointer_path}")
 
     return errors
 

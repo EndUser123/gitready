@@ -1,0 +1,19 @@
+{
+  "package": "gitready",
+  "skill": "sqa",
+  "status": "SKIP",
+  "timestamp": "2026-03-29T00:00:00Z",
+  "summary": "Package exceeds 100MB resource limit (173MB total)",
+  "details": {
+    "reason": "RESOURCE_LIMIT_EXCEEDED",
+    "limit_bytes": 104857600,
+    "actual_bytes": 181403648,
+    "breakdown": {
+      "assets": 61865984,
+      "other": "~12MB"
+    }
+  },
+  "themes": [
+    "resource_bounds"
+  ]
+}

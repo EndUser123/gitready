@@ -172,4 +172,147 @@ cd P:/packages/handoff && bash cleanup_plugin_standards.sh
 None - all violations can be auto-fixed.
 ```
 
+### hooks.json Validation (Auto-invoked when hooks/ exists)
+
+**Objective**: Ensure `hooks/hooks.json` entries match actual hook Python files in the plugin.
+
+**Why this matters**: hooks.json drifts from actual hook files over time. New hooks get added as `.py` files but never registered. Old hooks get removed but entries remain stale. During brownfield conversion, paths may still reference old `src/` locations.
+
+#### Detection Logic
+
+```bash
+cd {{TARGET_DIR}}
+
+# Step 1: Extract hook file paths from hooks.json
+if [ -f "hooks/hooks.json" ]; then
+    REGISTERED_PATHS=$(python3 -c "
+import json, sys
+try:
+    data = json.load(open('hooks/hooks.json'))
+    paths = []
+    for event_name, matchers in data.items():
+        if isinstance(matchers, list):
+            for matcher in matchers:
+                hooks = matcher.get('hooks', []) if isinstance(matcher, dict) else []
+                for hook in hooks:
+                    cmd = hook.get('command', '')
+                    # Extract the file path from commands like: python \"\$CLAUDE_PLUGIN_ROOT/scripts/hooks/X.py\"
+                    import re
+                    match = re.search(r'CLAUDE_PLUGIN_ROOT/(scripts/hooks/[^\s\"]+\.py)', cmd)
+                    if match:
+                        paths.append(match.group(1))
+                    else:
+                        # Bare path without CLAUDE_PLUGIN_ROOT
+                        match2 = re.search(r'([\w/]+\.py)', cmd)
+                        if match2 and 'hooks/' in match2.group(1):
+                            paths.append(match2.group(1))
+    for p in sorted(set(paths)):
+        print(p)
+except Exception as e:
+    print(f'ERROR: {e}', file=sys.stderr)
+    sys.exit(1)
+")
+
+    # Step 2: Find actual hook .py files (excluding __lib/ and __init__.py)
+    ACTUAL_HOOKS=$(find scripts/hooks -maxdepth 1 -name "*.py" ! -name "__init__.py" ! -name "__lib*" 2>/dev/null | sort)
+
+    # Step 3: Compare
+    echo "=== hooks.json Validation ==="
+    echo ""
+    echo "Registered in hooks.json:"
+    echo "$REGISTERED_PATHS" | while read path; do
+        if [ -f "$path" ]; then
+            echo "  ✓ $path"
+        else
+            echo "  ❌ STALE: $path (file does not exist)"
+        fi
+    done
+
+    echo ""
+    echo "Hook files not registered in hooks.json:"
+    for actual in $ACTUAL_HOOKS; do
+        basename=$(basename "$actual")
+        if ! echo "$REGISTERED_PATHS" | grep -q "$basename"; then
+            echo "  ⚠️  MISSING ENTRY: $actual"
+        fi
+    done
+
+    # Step 4: Brownfield path check
+    echo ""
+    echo "Brownfield path validation:"
+    if echo "$REGISTERED_PATHS" | grep -q "src/hooks/"; then
+        echo "  ❌ STALE PATH: hooks.json references src/hooks/ (should be scripts/hooks/ after brownfield conversion)"
+    else
+        echo "  ✓ No stale src/ paths detected"
+    fi
+else
+    echo "No hooks/hooks.json found — skipping hooks.json validation"
+fi
+```
+
+#### What Gets Checked
+
+| Check | What it catches | Severity |
+|-------|-----------------|----------|
+| Stale entry | hooks.json references `.py` file that doesn't exist | ❌ HIGH |
+| Missing entry | `.py` hook file exists but isn't in hooks.json | ⚠️ MEDIUM |
+| Brownfield path | hooks.json references `src/hooks/` instead of `scripts/hooks/` | ❌ HIGH |
+| Empty hooks.json | hooks.json has event arrays but all are empty `[]` | ℹ️ INFO |
+
+#### Auto-Fix for Missing Entries
+
+When hook files are found that aren't registered in hooks.json, offer to add them:
+
+```bash
+# For each unregistered hook file, determine its event from the filename:
+# PreCompact_*.py → "PreCompact" event
+# SessionStart_*.py → "SessionStart" event
+# UserPromptSubmit_*.py → "UserPromptSubmit" event
+# PostToolUse_*.py → "PostToolUse" event
+# PreToolUse_*.py → "PreToolUse" event
+
+# Auto-generate the entry:
+python3 -c "
+import json, re, os
+
+hooks_file = 'hooks/hooks.json'
+data = json.load(open(hooks_file))
+
+# Map filename prefix to event name
+EVENT_MAP = {
+    'PreCompact': 'PreCompact',
+    'SessionStart': 'SessionStart',
+    'UserPromptSubmit': 'UserPromptSubmit',
+    'PostToolUse': 'PostToolUse',
+    'PreToolUse': 'PreToolUse',
+    'ToolResponseReceived': 'ToolResponseReceived',
+    'Stop': 'Stop',
+}
+
+for hook_file in UNREGISTERED_FILES:
+    basename = os.path.basename(hook_file)
+    prefix = basename.split('_')[0]
+    event = EVENT_MAP.get(prefix)
+    if not event:
+        print(f'Cannot determine event for {basename} — add manually')
+        continue
+
+    entry = {
+        'matcher': '.*',
+        'hooks': [{
+            'type': 'command',
+            'command': f'python \"\$CLAUDE_PLUGIN_ROOT/scripts/hooks/{basename}\"'
+        }]
+    }
+
+    if event not in data:
+        data[event] = []
+    data[event].append(entry)
+    print(f'Added {basename} to {event}')
+
+with open(hooks_file, 'w') as f:
+    json.dump(data, f, indent=2)
+"
+```
+
 **Integration**: Runs automatically after package type detection, before structure building. Can be invoked standalone with `/gitready --check-standards`.

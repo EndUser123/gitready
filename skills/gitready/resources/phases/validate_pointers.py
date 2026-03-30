@@ -36,11 +36,11 @@ def validate_pointers(skill_md_path: str | Path | None = None) -> list[str]:
         if "> READ:" not in line:
             continue
 
-        # Extract the path after "> READ: "
+        # Extract the path after "> READ: " (may be backtick-quoted)
         parts = line.split("> READ:", 1)
         if len(parts) < 2:
             continue
-        pointer_path = parts[1].strip()
+        pointer_path = parts[1].strip().strip("`")
         if not pointer_path:
             errors.append(f"Line {line_no}: empty pointer path")
             continue

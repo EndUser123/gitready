@@ -14,7 +14,6 @@ import re
 import sys
 from pathlib import Path
 
-
 # Characters that cause problems in Windows junction names or slash command invocation
 INVALID_JUNCTION_CHARS = re.compile(r"[@?*:<>|+]")
 

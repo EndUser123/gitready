@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.25.0 (2026-04-14)
+- WORKFLOW SCOPE REQUIREMENT: PHASE 5 CI/CD workflow creation now documented as requiring `workflow` scope on GitHub token. Without it, workflow creation is skipped and reported as SKIPPED.
+
 ## v5.24.0 (2026-03-28)
 - CONTENT REASONABLENESS VALIDATION: PHASE 4 now validates file contents match template requirements
 - README content checks: Three Deployment Models section, junction/symlink dev mode, SKILLS deployment, Quick Start, badges

@@ -1,0 +1,10 @@
+{
+  "current_intent": {
+    "work_type": "refactor",
+    "target": "it to the new version we have",
+    "problem": "I think we have an old github refactor repo.  Can we update it to the new version we have?",
+    "user_prompt": "I think we have an old github refactor repo.  Can we update it to the new version we have?",
+    "timestamp": "2026-04-14T14:24:12.118532+00:00"
+  },
+  "last_updated": "2026-04-14T14:24:12.118940+00:00"
+}

@@ -58,7 +58,7 @@ checklist=(
   "CHANGELOG.md"
   "CONTRIBUTING.md"
   "AGENTS.md"
-  ".github/workflows/test.yml"
+  ".github/workflows/test.yml"  # requires workflow scope on GitHub token — otherwise SKIPPED
   "LICENSE file"
   "tests/ directory exists"
   "pytest tests pass"

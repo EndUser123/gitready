@@ -43,6 +43,7 @@ All packages are polished into resume-worthy GitHub artifacts with badges, cover
 ```bash
 /gitready                  # Full pipeline on current directory
 /gitready <name>           # Scaffold new package
+/gitready --status         # Show phase status (COMPLETED/SKIPPED/PENDING)
 /gitready --dry-run        # Preview without creating
 /gitready --skip <phase>   # Skip specific phase (e.g., --skip media)
 /gitready --check-only     # Analyze without creating
@@ -54,6 +55,7 @@ All packages are polished into resume-worthy GitHub artifacts with badges, cover
 |-----------|--------|
 | `/gitready` | Full pipeline on current directory |
 | `/gitready <name>` | Scaffold new package with full pipeline |
+| `/gitready --status` | Show phase status for a package |
 | `/gitready --dry-run` | Preview what will happen |
 | `/gitready --skip media` | Skip NotebookLM media generation |
 | `/gitready --check-only` | Analyze without creating |

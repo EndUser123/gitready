@@ -55,7 +55,7 @@ All packages are polished into resume-worthy GitHub artifacts with badges, cover
 |-----------|--------|
 | `/gitready` | Full pipeline on current directory |
 | `/gitready <name>` | Scaffold new package with full pipeline |
-| `/gitready --status` | Show phase status for a package |
+| `/gitready --status` | Show all phase states for a package (✓ COMPLETED, ⏭ SKIPPED, ○ PENDING) |
 | `/gitready --dry-run` | Preview what will happen |
 | `/gitready --skip media` | Skip NotebookLM media generation |
 | `/gitready --check-only` | Analyze without creating |
@@ -69,11 +69,13 @@ One command runs the full intelligent pipeline:
 3. **GENERATE** (PHASE 2-3) - Create all missing artifacts
 4. **VALIDATE** (PHASE 4) - Verify everything works
 5. **REVIEW** (PHASE 4.5-4.6) - Code review and quality checks
-6. **MEDIA** (PHASE 4.7-4.8) - Optional media and course generation
+6. **MEDIA** (PHASE 4.7-4.8) - Optional media and course generation (track as SKIPPED if auth unavailable)
 7. **POLISH** (PHASE 5) - Portfolio-quality badges, docs
 8. **CLEANUP** (PHASE 8) - Remove obsolete files
 9. **GIT** (PHASE 9) - Initialize repo and commit
 10. **REPORT** (PHASE 10) - Show completion status
+
+**Phase states:** ✓ COMPLETED (done) · ⏭ SKIPPED (conditional — auth missing or flag not provided) · ⏭ N/A (not applicable to this package type)
 
 ## Package Types
 
@@ -190,8 +192,8 @@ Auto-detects package type. Python libraries with `src/` + `pyproject.toml` auto-
 
 **Rollback**: Backup at `.backup/`. To rollback: `cp -r .backup/* . && rm -rf scripts/ .claude-plugin/`
 
-**Track completion**: `python resources/phases/track_phases.py {{TARGET_DIR}} --write 1.6 --status SKIPPED`
-*(If not brownfield-plugin, this phase is N/A — track as SKIPPED, not COMPLETED)*
+**Track completion**: `python resources/phases/track_phases.py {{TARGET_DIR}} --write 1.6 --status N/A`
+*(If not brownfield-plugin, this phase is N/A — track as N/A, not SKIPPED)*
 
 ---
 
@@ -267,6 +269,7 @@ Runs code-review plugin (security, performance, maintainability) and meta-review
 ## PHASE 4.7: Media Generation (Auto-invoked)
 
 > READ: `resources/phases/PHASE-4.7-media-gen.md`
+> IMPORTANT: READ `references/notebooklm-integration.md` for auth credentials, valid video styles (NOT "documentary"), file upload workaround, and download commands.
 
 Requires NotebookLM auth. If auth is not available, track as SKIPPED:
 ```
@@ -280,6 +283,7 @@ python resources/phases/track_phases.py {{TARGET_DIR}} --write 4.7 --status SKIP
 ## PHASE 4.8: Interactive Course (Auto-invoked)
 
 > READ: `resources/phases/PHASE-4.8-interactive-course.md`
+> IMPORTANT: The course is built using the 4-pass pipeline in the phase doc — design-system.md and interactive-elements.md are bundled with this skill at `resources/codebase-to-course/`. READ them before generating.
 
 Requires NotebookLM auth. If auth is not available, track as SKIPPED:
 ```
@@ -392,8 +396,14 @@ Initialize git repo (if not already): `git init`, add all files, initial commit,
 
 Three statuses:
 1. **PUBLIC ON GITHUB** - Live and accessible
-2. **READY FOR GITHUB** - Polished, needs push
-3. **LOCAL ONLY** - Needs polish before GitHub
+2. **READY FOR GITHUB** - Core phases complete; conditional phases (GitHub Publication, Repository Finalization) pending flag authorization
+3. **LOCAL ONLY** - Core phases incomplete or blocked
+
+**Do not claim "no pending work" when conditional phases are SKIPPED.** SKIPPED means the phase was not run because a flag was not provided — it is not settled, it is deferred. Pending flags = outstanding decisions.
+
+**When reporting skipped phases, use full phase names (not numbers). Show N/A separately from SKIPPED:**
+- ⏭ SKIPPED → Media Generation, Interactive Course, GitHub Publication, Repository Finalization (conditional — not run because auth missing or flag not provided; outstanding until flag is added)
+- ⏭ N/A → Brownfield Conversion (not applicable to this package type)
 
 ---
 

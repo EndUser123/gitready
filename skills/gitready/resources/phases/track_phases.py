@@ -159,7 +159,12 @@ def print_status_report(target_dir: Path, changelog_path: Path | None) -> None:
             marker = "✓" if status == "COMPLETED" else "⏭"
             print(f"PHASE {num:<4} {desc:<45} {marker} {status}")
         elif num in auto_skips:
-            print(f"PHASE {num:<4} {desc:<45} ⏭ SKIPPED   ({auto_skips[num]})")
+            reason = auto_skips[num]
+            if "not brownfield-plugin" in reason or "no .gitready" in reason:
+                display_status = "N/A"
+                print(f"PHASE {num:<4} {desc:<45} ⏭ {display_status:6} ({reason})")
+            else:
+                print(f"PHASE {num:<4} {desc:<45} ⏭ SKIPPED   ({reason})")
         else:
             print(f"PHASE {num:<4} {desc:<45} ○ PENDING")
 

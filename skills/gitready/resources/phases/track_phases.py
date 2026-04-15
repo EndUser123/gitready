@@ -127,7 +127,6 @@ def get_auto_skip_reasons(target_dir: Path) -> dict[str, str]:
         reasons["1.8"] = "no hooks to clean up"
     if pkg_type in ("claude-plugin", "brownfield-plugin"):
         reasons["4.5"] = "requires code-review plugin"
-    reasons["4.6"] = "requires pip-audit + bandit (auto-invoked)"
     reasons["4.7"] = "requires NotebookLM auth"
     reasons["4.8"] = "requires NotebookLM auth"
     reasons["6"] = "requires --publish flag"

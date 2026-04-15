@@ -347,11 +347,11 @@ python resources/phases/track_phases.py {{TARGET_DIR}} --write 7 --status SKIPPE
 
 ---
 
-## PHASE 4.6: Quality Scanning (Optional)
+## PHASE 4.6: Quality Scanning (Auto-invoked)
 
 > See `references/advanced-phases.md` for details and options.
 
-**Trigger**: `--scan-quality` flag. Security scanning (bandit, safety), dependency auditing (pip-audit), badge validation, quality metrics.
+Security scanning (bandit, safety), dependency auditing (pip-audit), badge validation, quality metrics.
 
 **Track completion**: `python resources/phases/track_phases.py {{TARGET_DIR}} --write 4.6`
 

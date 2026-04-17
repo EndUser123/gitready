@@ -1,10 +1,10 @@
 ---
 name: gitready
-version: 5.25.0
+version: 5.26.0
 status: "stable"
 description: This skill should be used when the user asks to "create a package", "scaffold a Python library", "make a GitHub-ready repo", "generate badges", "convert to plugin", "brownfield conversion", "validate plugin standards", or mentions package scaffolding, portfolio polish, repository structure setup, badge generation, or plugin standards validation. Creates GitHub-ready Python libraries, Claude skills, and Claude Code plugins with badges, coverage metrics, media artifacts, interactive course modules, and automatic plugin standards validation. Includes PHASE 6: GitHub Publication and PHASE 7: Repository Finalization.
 category: scaffolding
-enforcement: advisory
+enforcement: strict
 triggers:
   - /gitready
 aliases:
@@ -26,7 +26,7 @@ workflow_steps:
 suggest:
   - /init
 ---
-# /gitready - Universal Package Creator and Portfolio Polisher v5.20.0
+# /gitready - Universal Package Creator and Portfolio Polisher v5.26.0
 
 ## Purpose
 
@@ -412,6 +412,28 @@ Three statuses:
 **Related skills**: `/init` - Initialize CLAUDE.md for new projects
 
 **Used by**: Claude Code Plugins (primary), Python library conversion (migration), pure Python backend libraries (advanced)
+
+---
+
+## Non-Goals
+
+This skill does NOT:
+- **Manage package dependencies** — use pip/uv tools separately
+- **Run tests** — pytest/coverage are called by PHASE 4 validators, not owned by gitready
+- **Handle runtime deployment** — CI/CD, servers, and production infra are outside scope
+- **Brownfield conversion without user consent** — conversion only runs when explicitly requested or when Python library structure is auto-detected
+- **Multi-package monorepo management** — operates on one package at a time
+
+---
+
+## Operational Resilience
+
+gitready is **read-only with respect to the workspace** and **stateful only within a single target package**:
+
+- **Multi-terminal**: Safe to run in parallel terminals against different packages. Concurrent runs against the same package may conflict — use `--check-only` or `--dry-run` to preview before executing.
+- **Stale data**: PHASE 1 always clears `.claude/state*.json` before running to prevent stale session state from corrupting a new run.
+- **Compaction recovery**: If interrupted mid-phase, re-run `/gitready <target>` — completed phases are tracked in `references/changelog.md` and skipped on subsequent runs.
+- **Cognitive/reasoning hooks**: Intentionally out of scope — gitready is a scaffolding orchestrator, not a reasoning agent. Hooks are owned by the generated packages, not by this skill.
 
 ---
 

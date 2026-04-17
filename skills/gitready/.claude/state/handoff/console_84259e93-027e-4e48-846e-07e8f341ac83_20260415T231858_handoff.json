@@ -1,0 +1,133 @@
+{
+  "resume_snapshot": {
+    "schema_version": 2,
+    "snapshot_id": "be8cf72e-9a24-4cf7-b445-0e56afd0c015",
+    "terminal_id": "console_84259e93-027e-4e48-846e-07e8f341ac83",
+    "source_session_id": "57914d7b-4ecd-4f68-9094-2cd8301fb7d7",
+    "created_at": "2026-04-15T23:18:58.679856+00:00",
+    "expires_at": "2026-04-15T23:38:58.679856+00:00",
+    "status": "consumed",
+    "goal": "output got corrupted.  create a new file based on this: file:///P:/packages/yt-is/docs/pipeline_v2_final.html",
+    "current_task": "output got corrupted. create a new file based on this: file:///P:/packages/yt-is/docs/pipeline_v2_final.html",
+    "progress_percent": 65,
+    "progress_state": "in_progress",
+    "blockers": [],
+    "active_files": [
+      "P:/packages/gitready/skills/gitready/SKILL.md",
+      "P:/packages/gitready/skills/gitready/references/package-type-detection.md",
+      "P:/packages/gitready/skills/gitready/references/stale-location-cleanup.md",
+      "P:/packages/gitready/skills/gitready/references/changelog.md",
+      "P:/packages/gitready/skills/gitready/references/exception-aware-validation.md",
+      "P:/packages/gitready/skills/gitready/resources/phases/validate_pointers.py",
+      "P:/packages/gitready/skills/gitready/resources/phases/track_phases.py",
+      "P:/packages/gitready/skills/gitready/references/completion-report.md",
+      "P:/packages/gitready/skills/gitready/references/exception-registry.md",
+      "P:/.claude/skills/skill-audit/audit.py"
+    ],
+    "pending_operations": [
+      {
+        "type": "skill",
+        "target": "skill: skill-audit",
+        "state": "in_progress"
+      },
+      {
+        "type": "investigation",
+        "target": "files: **/*",
+        "state": "in_progress"
+      },
+      {
+        "type": "read",
+        "target": "P:/packages/gitready/skills/gitready/SKILL.md",
+        "state": "in_progress"
+      },
+      {
+        "type": "investigation",
+        "target": "files: **/*.md",
+        "state": "in_progress"
+      },
+      {
+        "type": "read",
+        "target": "P:/packages/gitready/skills/gitready/references/package-type-detection.md",
+        "state": "in_progress"
+      }
+    ],
+    "next_step": "Resume skill on skill: skill-audit.",
+    "decision_refs": [
+      "dec_a903c9b2a94f4f518f2372ac5726ec34"
+    ],
+    "evidence_refs": [
+      "ev_c36ee8a6703c444f95bfb12bf589466d",
+      "ev_efbd942ecb964b59994e455887af4fe9",
+      "ev_d56e2a129a7545d89eb5623939bc2d5c",
+      "ev_e9de37d6852a475a848bed4442ff6fcc",
+      "ev_6d205ad7a9ea4fd889107dc5fefbb831",
+      "ev_66ba67ec2313407e96a506a204cda6e2"
+    ],
+    "n_1_transcript_path": "C:\\Users\\brsth\\.claude\\projects\\P--\\57914d7b-4ecd-4f68-9094-2cd8301fb7d7.jsonl",
+    "n_2_transcript_path": null,
+    "message_intent": "instruction",
+    "goal_origin": "user_message",
+    "quality_score": 0.4,
+    "tasks_snapshot": [],
+    "consumed_at": "2026-04-15T23:19:35.610615+00:00",
+    "consumed_by_session_id": "57914d7b-4ecd-4f68-9094-2cd8301fb7d7"
+  },
+  "decision_register": [
+    {
+      "id": "dec_a903c9b2a94f4f518f2372ac5726ec34",
+      "kind": "constraint",
+      "summary": "``` LOOP until exit_condition: PHASE 1: DIAGNOSING → /skill-audit (13 lenses) → audit_findings → craft_lens_enforcer → craft_issues (imperative form, triggers, progressive disclosure, SKILL.md size) PHASE 2: PLANNING → Route findings: strategic defect → /skill-audit (re-diagnose) implementation → /skill-ship description/trigger → skill-creator (eval iteration) craft structure → skill-development → If all owned by \"source skill\" → exit (nothing to do) PHASE 3: EXECUTING → For each action by priority: invoke appropriate skill PHASE 4: EVALUATING → fidelity_tracker.run() → fidelity_score → If passing → exit_condition = True → Else → loop back to PHASE 1 PHASE 5: GATING → CertificationGate.check() (context size, frontmatter, trigger accuracy) → If FAIL → route to appropriate skill, do not exit loop → If PASS → exit_condition = True ``` **`/tilldone`** handles sub-loops (eval iteration until pass or max 5, audit pass until no HIGH findings or max 3) — craft invokes it rather than duplicating loop control. **Exit condition**: fidelity_score passes threshold AND cert gate passes. Not just structural correctness — actual working fidelity in Bruce's environment.",
+      "details": "``` LOOP until exit_condition: PHASE 1: DIAGNOSING → /skill-audit (13 lenses) → audit_findings → craft_lens_enforcer → craft_issues (imperative form, triggers, progressive disclosure, SKILL.md size) PHASE 2: PLANNING → Route findings: strategic defect → /skill-audit (re-diagnose) implementation → /skill-ship description/trigger → skill-creator (eval iteration) craft structure → skill-development → If all owned by \"source skill\" → exit (nothing to do) PHASE 3: EXECUTING → For each action by priority: invoke appropriate skill PHASE 4: EVALUATING → fidelity_tracker.run() → fidelity_score → If passing → exit_condition = True → Else → loop back to PHASE 1 PHASE 5: GATING → CertificationGate.check() (context size, frontmatter, trigger accuracy) → If FAIL → route to appropriate skill, do not exit loop → If PASS → exit_condition = True ``` **`/tilldone`** handles sub-loops (eval iteration until pass or max 5, audit pass until no HIGH findings or max 3) — craft invokes it rather than duplicating loop control. **Exit condition**: fidelity_score passes threshold AND cert gate passes. Not just structural correctness — actual working fidelity in Bruce's environment.",
+      "priority": "high",
+      "applies_when": "Continue the current task after compact.",
+      "source_refs": [
+        "ev_c36ee8a6703c444f95bfb12bf589466d"
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "id": "ev_c36ee8a6703c444f95bfb12bf589466d",
+      "type": "transcript",
+      "label": "Current compact transcript",
+      "path": "C:\\Users\\brsth\\.claude\\projects\\P--\\57914d7b-4ecd-4f68-9094-2cd8301fb7d7.jsonl",
+      "content_hash": "sha256:18fb73d0b0c9c1076549d592d0735c4791e5ecbd9e1a1352d63bc3c019698028"
+    },
+    {
+      "id": "ev_efbd942ecb964b59994e455887af4fe9",
+      "type": "file",
+      "label": "SKILL.md",
+      "path": "P:\\packages\\gitready\\skills\\gitready\\SKILL.md",
+      "content_hash": "sha256:077772846b2577a9b518ea70a78971c8e9f60933c656cdd1e1c596bf24418a6b"
+    },
+    {
+      "id": "ev_d56e2a129a7545d89eb5623939bc2d5c",
+      "type": "file",
+      "label": "package-type-detection.md",
+      "path": "P:\\packages\\gitready\\skills\\gitready\\references\\package-type-detection.md",
+      "content_hash": "sha256:7e01909197e83bc65d269cb1bc026a47c2963617ee37ea70a3f2a3f51ef28560"
+    },
+    {
+      "id": "ev_e9de37d6852a475a848bed4442ff6fcc",
+      "type": "file",
+      "label": "stale-location-cleanup.md",
+      "path": "P:\\packages\\gitready\\skills\\gitready\\references\\stale-location-cleanup.md",
+      "content_hash": "sha256:2316a407dea9da15bcc629872a543275dbc0077c470b56f0c00ff793bceecbe1"
+    },
+    {
+      "id": "ev_6d205ad7a9ea4fd889107dc5fefbb831",
+      "type": "file",
+      "label": "changelog.md",
+      "path": "P:\\packages\\gitready\\skills\\gitready\\references\\changelog.md",
+      "content_hash": "sha256:fb9c2998d44e09570a431d5aa596fa50dfd9a826a3c1bde3faa68582d1abc475"
+    },
+    {
+      "id": "ev_66ba67ec2313407e96a506a204cda6e2",
+      "type": "file",
+      "label": "exception-aware-validation.md",
+      "path": "P:\\packages\\gitready\\skills\\gitready\\references\\exception-aware-validation.md",
+      "content_hash": "sha256:f84738c3182460871b5639bf8c01b80e3ef16668101a91e110bdf43d609349ed"
+    }
+  ],
+  "checksum": "sha256:20e8362ba888020d5bc34e0c908746d622bff2e3bc822c42cce03a6a917a38ac"
+}

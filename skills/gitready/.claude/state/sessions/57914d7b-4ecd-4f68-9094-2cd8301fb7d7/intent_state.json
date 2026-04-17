@@ -1,0 +1,10 @@
+{
+  "current_intent": {
+    "work_type": "unknown",
+    "target": "new",
+    "problem": "output got corrupted.  create a new file based on this: file:///P:/packages/yt-is/docs/pipeline_v2_final.html",
+    "user_prompt": "output got corrupted.  create a new file based on this: file:///P:/packages/yt-is/docs/pipeline_v2_final.html",
+    "timestamp": "2026-04-15T23:09:01.955178+00:00"
+  },
+  "last_updated": "2026-04-15T23:09:01.958961+00:00"
+}
